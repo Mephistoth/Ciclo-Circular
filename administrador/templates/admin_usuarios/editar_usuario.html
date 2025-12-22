@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="es">
+
+<head>
+    <title>Ciclo Circular</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Tus mismos estilos del template principal -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <noscript>
+        <link rel="stylesheet" href="{% static 'css/noscript.css' %}" />
+    </noscript>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        .formulario-usuario label,
+        .formulario-usuario input,
+        .formulario-usuario select,
+        .formulario-usuario option,
+        .formulario-usuario h2 {
+            color: white !important;
+        }
+
+        .formulario-usuario input,
+        .formulario-usuario select {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            border: 1px solid #ddd !important;
+        }
+
+        .formulario-usuario input::placeholder {
+            color: #e0e0e0 !important;
+        }
+    </style>
+</head>
+
+<body class="is-preload">
+
+    <br>
+
+    <div id="wrapper">
+        <div class="container-sm" style="margin-bottom:auto; max-width: 700px;">
+
+
+            <h2 class="text-center">Editar Usuario: {{ usuario.username }}</h2>
+            <hr>
+
+            <form method="POST" class="formulario-usuario">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" name="nombre" class="form-control" value="{{ usuario.first_name }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" value="{{ usuario.email }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Teléfono</label>
+                    <input type="number" name="telefono" class="form-control" value="{{ usuario.telefono }}">
+                </div>
+
+                <div class="mb-3">
+    <label class="form-label">Área</label>
+    <select name="area" class="form-select" required>
+        <option value="" disabled>Seleccione...</option>
+        {% for area in areas %}
+            <option value="{{ area.id_area }}"
+                {% if registro and area.id_area == registro.id_area.id_area %}selected{% endif %}>
+                {{ area.nombre }} ({{ area.id_empresa.nombre }})
+            </option>
+        {% endfor %}
+    </select>
+</div>
+
+                <button type="submit" class="btn btn-success">Guardar cambios</button>
+                <a href="/administrador/usuarios?empresa={{ empresa_id }}" class="btn btn-secondary">Cancelar</a>
+
+            </form>
+
+        </div>
+    </div>
+
+    <div id="bg"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/browser.min.js' %}"></script>
+    <script src="{% static 'js/breakpoints.min.js' %}"></script>
+    <script src="{% static 'js/util.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,64 @@
+{% extends 'autodiagnostico/logistica/home_logistica.html' %}
+{% load static %}
+{% block titulo %}Odyssey | Home{% endblock %}
+{% load crispy_forms_tags %}
+
+
+{% block logistica %}
+<div class="container">
+
+    {% if messages %}
+    <div class="alert alert-success" role="alert">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+   
+
+    <form action="" method="post">
+        <h4>Ingresa una oportunidad</h4>
+        {% csrf_token %}
+        {{form | crispy}}
+
+        <div>
+
+            <input type="submit" class="btn btn-primary" value="ingresar">
+        </div>
+    </form>
+</div>
+<br>
+<h4>Tus Oportunidades</h4>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for p in oportunidad %}
+    
+    {% if p.etapa.nombre == "Logistica" %}
+        
+    
+        <div class="col">
+            <div class="card text-bg-warning shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{p.etapa}}</h5>
+                    <p class="card-text">{{p.nombre}}</p>
+                    <form action="{% url 'eliminar_oportunidad_logistica' p.id_entrada %}" method="post"
+                    style="margin-top:10px;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar
+                    </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    
+    {% endif %}
+    
+    {% endfor %}
+</div>
+
+<script>
+    document.getElementById("oportunidad").className = "btn btn-success";
+</script>
+    
+{% endblock logistica %}
+    

@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="es">
+
+<head>
+    <title>Ciclo Circular</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <noscript>
+        <link rel="stylesheet" href="{% static 'css/noscript.css' %}" />
+    </noscript>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="is-preload">
+
+    <div id="wrapper">
+
+        {% block body %}
+        <div class="container-sm">
+
+            {% if user.is_authenticated %}
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <a href="{% url 'panel_coordinador' %}" id="home_admin">Volver al Inicio</a>
+                <a href="{% url 'logout' %}" id="cerrarSesion">Cerrar sesión</a>
+            </div>
+
+            {% if not user.empresa_coordinador %}
+            <div class="alert alert-danger text-center mt-5">
+                No tienes una empresa asignada como coordinador.
+            </div>
+            <h3 class="text-center">Registra la empresa y el área a la que perteneces</h3>
+            <div class="text-center mt-3">
+                <a href="{% url 'agregar_Area' user.id %}">
+                    <button class="btn btn-primary">Registrar Área</button>
+                </a>
+            </div>
+            {% else %}
+
+            <h2 class="text-center my-4 titulo-seccion">USUARIOS DE SU EMPRESA</h2>
+
+            <p class="text-center mb-4">
+                Empresa asignada:
+                <strong>{{ user.empresa_coordinador.nombre }}</strong><br>
+                ID Empresa:
+                <strong>{{ user.empresa_coordinador.id_empresa }}</strong>
+            </p>
+
+            <hr class="my-4">
+
+            <!-- =================== USUARIOS =================== -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="m-0">USUARIOS DE {{ user.empresa_coordinador.nombre|upper }}</h3>
+
+                <a href="{% url 'crear_usuario_coordinacion' %}" class="btn btn-success">
+                    Crear Nuevo Usuario
+                </a>
+            </div>
+
+            <table class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th>Área</th>
+                        <th>Usuario</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for registro in usuarios_area %}
+                    <tr>
+                        <td>{{ registro.id_area.nombre }}</td>
+                        <td>{{ registro.usuario.username }}</td>
+                        <td>{{ registro.usuario.first_name }} {{ registro.usuario.last_name }}</td>
+                        <td>{{ registro.usuario.email }}</td>
+                        <td>{{ registro.usuario.telefono }}</td>
+                        <td>
+
+                            <form action="{% url 'ver_cv_coordinacion' registro.usuario.id %}" method="GET"
+                                style="display:inline;">
+                                <button class="btn btn-info btn-sm">CV</button>
+                            </form>
+
+                            <form action="{% url 'editar_usuario_coordinacion' registro.usuario.id %}" method="GET"
+                                style="display:inline;">
+                                <button class="btn btn-warning btn-sm"
+                                    style="background-color:#5405d3; border-color:#f8f8f7;">
+                                    Modificar
+                                </button>
+                            </form>
+
+                            <form action="{% url 'resetear_clave_coordinacion' registro.usuario.id %}" method="POST"
+                                style="display:inline;">
+                                {% csrf_token %}
+                                <button class="btn btn-outline-secondary btn-sm"
+                                    onclick="return confirm('¿Enviar nueva clave al email de este usuario?');">
+                                    Resetear clave
+                                </button>
+                            </form>
+
+                            <form action="{% url 'eliminar_usuario_coordinacion' registro.usuario.id %}" method="POST"
+                                style="display:inline;">
+                                {% csrf_token %}
+                                <button class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Está seguro que desea eliminar este usuario?');">
+                                    Eliminar
+                                </button>
+                            </form>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% endif %} <!-- cierre empresa -->
+
+            {% else %}
+            <h2 class="text-center">Inicia Sesión</h2>
+            <p class="text-center">Para acceder a tu Auto Diagnóstico</p>
+
+            <div class="text-center">
+                <a href="{% url 'login' %}">
+                    <button class="btn btn-primary">Iniciar Sesión</button>
+                </a>
+            </div>
+            {% endif %}
+
+        </div>
+        {% endblock %}
+
+    </div>
+
+    <div id="bg"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/browser.min.js' %}"></script>
+    <script src="{% static 'js/breakpoints.min.js' %}"></script>
+    <script src="{% static 'js/util.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>

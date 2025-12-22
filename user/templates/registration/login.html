@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+{% load crispy_forms_tags %}
+<div id="wrapper">
+
+    <div class="container" id="login">
+
+        <div class="row">
+            <div class="col-12 col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body" id="card_">
+                        <h2>Ingrese sus credenciales</h2>
+                        <hr>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <div id="div_id_username" class="control-group"> <label for="id_username"
+                                    class="control-label requiredField" style="margin-bottom: 5px; margin-top: 20px;">
+                                    Nombre de usuario<span class="asteriskField">*</span> </label>
+                                <div class="controls"> <input type="text" name="username" autofocus
+                                        autocapitalize="none" autocomplete="username" maxlength="150"
+                                        class="textinput textInput" required id="id_username"> </div>
+                            </div>
+                            <div id="div_id_password" class="control-group"> <label for="id_password"
+                                    class="control-label requiredField" style="margin-bottom: 5px; margin-top: 15px;">
+                                    Contraseña<span class="asteriskField">*</span> </label>
+                                <div class="controls"> <input type="password" name="password"
+                                        autocomplete="current-password" class="textinput textInput" required
+                                        id="id_password"> </div>
+                            </div>
+                            <input type="submit" class="btn btn-success" value="ingresar" style="margin-top: 5px;">
+                            <!--
+                            <div class="containter-sm">
+                                <p>¿No tienes cuenta? <a href="{% url 'registro' %}">Registrate</a></p>
+                            </div>
+                            -->
+                            <p class="mt-3">
+                                ¿Olvidaste tu contraseña?
+                                <a href="{% url 'reset_password' %}">Restablecer clave</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="bg"></div>
+{% endblock %}

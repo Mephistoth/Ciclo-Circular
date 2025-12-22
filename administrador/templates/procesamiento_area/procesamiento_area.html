@@ -1,0 +1,218 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="es">
+
+<head>
+    <title>Ciclo Circular</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <noscript>
+        <link rel="stylesheet" href="{% static 'css/noscript.css' %}" />
+    </noscript>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="is-preload">
+
+    <div id="wrapper" style="margin-top: -25px;">
+        <div class="container-sm">
+            {% if user.is_authenticated %}
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <a id="home_admin" href="{% url 'home_procesamiento' %}">Volver al Inicio</a><a href="{% url 'logout' %}"
+                    id="cerrarSesion">Cerrar sesión</a>
+            </div>
+
+            {% if user.is_staff %}
+            <h3>Bienvenido Admin, {{ user.first_name }}</h3>
+
+            <h2 class="titulo-seccion text-center my-4">Procesamiento de Etapa</h2>
+
+            <hr>
+
+            <!-- Seleccionar empresa -->
+            <h3>Seleccione una empresa:</h3>
+
+            <div class="row mb-4">
+                {% for empresa in empresas %}
+                <div class="col">
+                    <a href="?empresa={{ empresa.id_empresa }}">
+                        <button type="button"
+                            class="btn {% if empresa_seleccionada and empresa.id_empresa == empresa_seleccionada.id_empresa %}btn-success{% endif %}">
+                            {{ empresa.nombre }}
+                        </button>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if empresa_seleccionada %}
+
+            <hr>
+            <h3>¿Qué etapa deseas ver?</h3>
+
+            <!-- Selección de etapas por ID numérico -->
+            <div class="row">
+                <div class="col-auto"><strong>1.</strong></div>
+                <div class="col">
+                    <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=1">
+                        <button type="button" class="btn {% if etapa_seleccionada == 1 %}btn-success{% endif %}">
+                            Extracción Materia Prima
+                        </button>
+                    </a>
+                </div>
+
+                <div class="col-auto"><strong>2.</strong></div>
+                <div class="col">
+                    <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=2">
+                        <button type="button" class="btn {% if etapa_seleccionada == 2 %}btn-success{% endif %}">
+                            Diseño y Producción
+                        </button>
+                    </a>
+                </div>
+
+                <div class="col-auto"><strong>3.</strong></div>
+                <div class="col">
+                    <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=3">
+                        <button type="button" class="btn {% if etapa_seleccionada == 3 %}btn-success{% endif %}">
+                            Logística
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-auto"><strong>4.</strong></div>
+                <div class="col">
+                    <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=4">
+                        <button type="button" class="btn {% if etapa_seleccionada == 4 %}btn-success{% endif %}">
+                            Compra
+                        </button>
+                    </a>
+                </div>
+
+                <div class="col-auto"><strong>5.</strong></div>
+                <div class="col">
+                    <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=5">
+                        <button type="button" class="btn {% if etapa_seleccionada == 5 %}btn-success{% endif %}">
+                            Uso Consumo
+                        </button>
+                    </a>
+                </div>
+
+                <div class="col-auto"><strong>6.</strong></div>
+                <div class="col">
+                    <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=6">
+                        <button type="button" class="btn {% if etapa_seleccionada == 6 %}btn-success{% endif %}">
+                            Fin de Vida
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+            {% endif %}
+
+            {% if empresa_seleccionada and etapa_seleccionada %}
+            <hr>
+            <h3 class="mt-4">¿Qué desea procesar?</h3>
+
+            <div class="row">
+                <div class="col">
+                    <a
+                        href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa={{ etapa_seleccionada }}&entrada=entrada">
+                        <button type="button" id="entrada"
+                            class="btn {% if entrada_seleccionada == 'entrada' %}btn-success{% endif %}">
+                            Entradas
+                        </button>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a
+                        href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa={{ etapa_seleccionada }}&entrada=salida">
+                        <button type="button" id="salida"
+                            class="btn {% if entrada_seleccionada == 'salida' %}btn-success{% endif %}">
+                            Salidas
+                        </button>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a
+                        href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa={{ etapa_seleccionada }}&entrada=oportunidad">
+                        <button type="button" id="oportunidad"
+                            class="btn {% if entrada_seleccionada == 'oportunidad' %}btn-success{% endif %}">
+                            Oportunidades
+                        </button>
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+
+
+            <hr>
+
+            <!-- CAJA CHATGPT -->
+            {% if texto_concatenado %}
+            <h3 class="mt-4">Contenido Detectado</h3>
+
+            <form method="POST">
+                {% csrf_token %}
+                <textarea name="texto_concatenado" class="form-control" rows="8">{{ texto_concatenado }}</textarea>
+                <br>
+                <button type="submit" class="btn btn-primary w-100">Generar Resumen</button>
+            </form>
+            {% endif %}
+
+            {% if resumen_ia %}
+            <hr>
+            <h3 class="mt-3">Resumen Generado por IA</h3>
+            <div class="alert alert-secondary">
+                {{ resumen_ia }}
+            </div>
+
+            <div class="text-center mt-3">
+                <form action="{% url 'descargar_resumen' %}" method="get" style="display: inline;">
+                    <input type="hidden" name="resumen" value="{{ resumen_ia }}">
+                    <button type="submit" class="btn btn-primary">
+                        Descargar resumen 200 palabras
+                    </button>
+                </form>
+            </div>
+
+            {% endif %}
+
+
+
+            {% endif %}
+
+            {% else %}
+            <h1>Debes iniciar sesión primero.</h1>
+            <a href="{% url 'login' %}">
+                <button type="button" class="btn btn-primary">Iniciar Sesión</button>
+            </a>
+            {% endif %}
+
+
+        </div>
+    </div>
+
+    <div id="bg"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/browser.min.js' %}"></script>
+    <script src="{% static 'js/breakpoints.min.js' %}"></script>
+    <script src="{% static 'js/util.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>

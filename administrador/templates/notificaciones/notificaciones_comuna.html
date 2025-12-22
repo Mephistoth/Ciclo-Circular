@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ciclo Circular</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+
+<body class="is-preload">
+
+    <div class="container mt-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a id="home_admin" href="{% url 'menu_notificaciones' %}">Volver al Menú</a>
+            <a href="{% url 'logout' %}" id="cerrarSesion">Cerrar sesión</a>
+        </div>
+
+        <h3>Bienvenido Admin, {{ user.first_name }}</h3>
+        <h1 class="titulo-seccion text-center my-4">NOTIFICACIONES POR COMUNA</h1>
+
+        <hr>
+
+        <h3>Seleccione una comuna:</h3>
+
+        <div class="row mt-4">
+            {% for c in comunas %}
+            <div class="col-auto mb-3">
+                <a href="?comuna={{ c }}">
+                    <button class="btn {% if comuna_seleccionada == c %}btn-success{% endif %}">
+                        {{ c }}
+                    </button>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if comuna_seleccionada %}
+        <hr>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'form_mensaje_comuna' comuna_seleccionada %}" class="btn btn-outline-light no-hover-white"
+                style="padding:15px; font-size:20px; border:2px solid">
+                ENVIAR EMAIL A USUARIOS DE {{ comuna_seleccionada }}
+            </a>
+        </div>
+        {% if comuna_seleccionada %}
+        <p class="text-center" style="color:white;">
+            Usuarios en {{ comuna_seleccionada }}: {{ total_usuarios }}
+        </p>
+        {% endif %}
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>

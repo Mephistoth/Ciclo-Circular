@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="es">
+
+<head>
+    <title>Ciclo Circular</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <noscript>
+        <link rel="stylesheet" href="{% static 'css/noscript.css' %}" />
+    </noscript>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="is-preload">
+
+    <div id="wrapper">
+
+        {% block body %}
+        <div class="container-sm">
+
+            {% if user.is_authenticated %}
+
+            <!-- NAV -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <a href="{% url 'panel_coordinador' %}" id="home_admin">Volver al Inicio</a>
+                <a href="{% url 'logout' %}" id="cerrarSesion">Cerrar sesión</a>
+            </div>
+
+            {% if not user.empresa_coordinador %}
+            <div class="alert alert-danger text-center mt-5">
+                No tienes una empresa asignada como coordinador.
+            </div>
+            <h3 class="text-center">Registra la empresa y el área a la que perteneces</h3>
+            <div class="text-center mt-3">
+                <a href="{% url 'agregar_Area' user.id %}">
+                    <button class="btn btn-primary">Registrar Área</button>
+                </a>
+            </div>
+            {% else %}
+
+            <h2 class="text-center my-4 titulo-seccion">Gráficos de Registros</h2>
+
+            <p class="text-center mb-4">
+                Empresa asignada:
+                <strong>{{ user.empresa_coordinador.nombre }}</strong><br>
+                ID Empresa:
+                <strong>{{ user.empresa_coordinador.id_empresa }}</strong>
+            </p>
+
+            <!-- BOTONES DE ETAPAS -->
+            <h4 class="mb-3">Seleccione una etapa</h4>
+            <div class="row mb-3">
+                {% for slug, nombre in etapas.items %}
+                {% if forloop.counter0|divisibleby:3 and not forloop.first %}
+            </div>
+            <div class="row mb-3">
+                {% endif %}
+                <div class="col">
+                    <a href="?etapa={{ slug }}">
+                        <button type="button"
+                            class="btn {% if etapa == slug %}btn-success{% endif %} w-100">
+                            {{ forloop.counter }}. {{ nombre }}
+                        </button>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+
+            <hr>
+            <!-- BOTONES DE ÁREAS -->
+            {% if etapa %}
+            <div class="container-sm mt-4">
+                <h4>Seleccione un área</h4>
+                <div class="row">
+                    {% for a in areas %}
+                    <div class="col-4 mb-3">
+                        <a href="?etapa={{ etapa }}&area={{ a.id_area }}">
+                            <button type="button" id="area_{{ a.id_area }}" class="btn btn-outline w-100">
+                                {{ a.nombre }}
+                            </button>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- GRÁFICO -->
+            {% if area_grafico %}
+            <hr>
+            <div class="container-sm mt-5">
+                <h4 class="text-center mb-4">Gráfico para el área: <strong>{{ area_grafico.0.nombre }}</strong></h4>
+                <canvas id="myChart{{ area_grafico.0.id_area }}" style="margin-top: 20px;"></canvas>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                const ctx{{ area_grafico.0.id_area }} = document.getElementById('myChart{{ area_grafico.0.id_area }}').getContext('2d');
+                const myChart{{ area_grafico.0.id_area }} = new Chart(ctx{{ area_grafico.0.id_area }}, {
+                    type: 'bar',
+                    data: {
+                        labels: [{% for clave, valor in cantidad_datos_dicc %}'{{ clave }}', {% endfor %}],
+                    datasets: [
+                    {
+                        label: 'Entradas',
+                        data: [{% for clave, valor in cantidad_datos_dicc %}{{ valor }}, {% endfor %}],
+                    backgroundColor: 'rgb(255, 81, 81)',
+                    },
+                    {
+                        label: 'Salidas',
+                        data: [{% for clave, valor in cantidad_datos_dicc_salida %}{{ valor }}, {% endfor %}],
+                    backgroundColor: 'rgb(81, 152, 255)',
+                    },
+                    {
+                        label: 'Oportunidades',
+                        data: [{% for clave, valor in cantidad_datos_dicc_oportunidad %}{{ valor }}, {% endfor %}],
+                    backgroundColor: 'rgb(46, 221, 131)',
+                    }
+                    ]
+                },
+                    options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Número de registros por día y tipo',
+                            font: { size: 20 }
+                        }
+                    },
+                    scales: {
+                        x: { stacked: true, title: { display: true, text: 'Fecha', font: { size: 16 } } },
+                        y: { stacked: true, title: { display: true, text: 'Cantidad', font: { size: 16 } } }
+                    }
+                },
+                    plugins: [{
+                        beforeDraw: (chart) => {
+                            const ctx = chart.ctx;
+                            ctx.save();
+                            ctx.globalCompositeOperation = 'destination-over';
+                            ctx.fillStyle = 'white';
+                            ctx.fillRect(0, 0, chart.width, chart.height);
+                            ctx.restore();
+                        }
+                    }]
+                });
+
+                // Resaltar botón del área seleccionada
+                document.getElementById('area_{{ area_grafico.0.id_area }}').className = "btn btn-success w-100";
+            </script>
+            {% endif %}
+
+            {% endif %} <!-- cierra empresa -->
+            {% endif %} <!-- cierra autenticado -->
+
+        </div>
+        {% endblock %}
+
+    </div>
+
+    <div id="bg"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/browser.min.js' %}"></script>
+    <script src="{% static 'js/breakpoints.min.js' %}"></script>
+    <script src="{% static 'js/util.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>

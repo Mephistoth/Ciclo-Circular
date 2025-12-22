@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ciclo Circular</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+
+<body class="is-preload">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a id="home_admin" href="{% url 'home_procesamiento' %}">Volver al Inicio</a>
+            <a href="{% url 'logout' %}" id="cerrarSesion">Cerrar sesión</a>
+        </div>
+
+        <h2 class="text-center mb-4">Procesamiento de Texto Libre (IA Semántica)</h2>
+
+        <!-- Formulario -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="archivo" class="form-label d-block">Sube un archivo (.txt o .docx, o .pdf)</label>
+                <div class="input-group">
+                    <input type="file" name="archivo" id="archivo" class="form-control">
+                    <button type="button" id="limpiarArchivo" class="btn btn-secondary">Limpiar</button>
+            </div>
+
+            <div class="mb-3">
+                <label for="texto" class="form-label">Ingresa un texto libre</label>
+                <textarea name="texto" id="texto" class="form-control" rows="6"
+                    placeholder="Escribe tu texto aquí..."></textarea>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">Generar Resumen 200 palabras</button>
+            </div>
+        </form>
+
+        {% if resumen %}
+        <hr>
+        <h4>Resumen generado:</h4>
+        <div class="alert alert-info mt-3">
+            {{ resumen }}
+        </div>
+
+        <div class="text-center mt-3">
+            <form action="{% url 'descargar_resumen' %}" method="get" style="display: inline;">
+                <input type="hidden" name="resumen" value="{{ resumen }}">
+                <button type="submit" class="btn btn-primary">
+                    Descargar resumen 200 palabras
+                </button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const archivoInput = document.getElementById("archivo");
+            const limpiarBtn = document.getElementById("limpiarArchivo");
+
+            limpiarBtn.style.display = "none";
+
+            archivoInput.addEventListener("change", function () {
+                limpiarBtn.style.display = archivoInput.files.length > 0 ? "inline-block" : "none";
+            });
+
+            limpiarBtn.addEventListener("click", function () {
+                archivoInput.value = "";
+                limpiarBtn.style.display = "none";
+            });
+        });
+    </script>
+
+    <script>
+        document.getElementById("btnDescargar").addEventListener("click", async function (e) {
+            e.preventDefault(); // Evita que recargue la página
+
+            const response = await fetch("{% url 'descargar_resumen' %}");
+            if (!response.ok) {
+                alert("No hay resumen disponible o ocurrió un error.");
+                return;
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "resumen_200_palabras.docx";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+
+</html>

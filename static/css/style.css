@@ -1,0 +1,98 @@
+#home{
+    margin-top: 80px;
+}
+
+
+#login{
+    margin-top: 50px; 
+    
+}
+
+#card_{
+    background-color: #1b1f22;
+}
+
+
+#Area{
+    margin-top: 50px;
+}
+
+.card{
+    background-color: rgba(27, 31, 34, 0.85);
+    border-radius: 15px;
+    
+}
+
+#username {
+    background-color: white;
+    color: black;
+}
+
+#first_name {
+    background-color: white;
+    color: black;
+}
+
+#last_name {
+    background-color: white;
+    color: black;
+}
+
+#email {
+    background-color: white;
+    color: black;
+}
+
+#password {
+    background-color: white;
+    color: black;
+}
+
+#cerrarSesion{
+    color: red;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#home_admin{
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#home_admin:hover,
+#cerrarSesion:hover {
+  text-decoration: underline dotted;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+#descripcion {
+    background-color: white;
+    color: black;
+}
+
+#ingresarArea{
+    margin-top: 90px;
+}
+
+
+/* graficos */
+#grafico{
+    height: 500px;
+    width: 800px;
+    background-color: white;
+    margin-top: 70px;
+}
+
+#msj_confirmacion{
+    margin-top: 37px;
+    display: none
+}
+
+#msj_cancelar{
+    display: none;
+}
+
+#confirmar_nulo{
+    display: none;
+}

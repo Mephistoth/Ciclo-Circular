@@ -1,0 +1,162 @@
+{% extends 'usoConsumo/frecuencia/home_frecuencia.html' %}
+{% load static %}
+
+{% block frecuencia_uso  %}
+
+<div class="container-sm">
+    <hr>
+    <h2>Promedio de datos </h2>
+
+
+
+    <div class="container-sm">
+        <h3>Frecuencia por palabras: Entradas</h3>
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+
+                    <th scope="col">Palabra</th>
+                    <th scope="col">Frecuencia</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+
+
+
+                {% for clave, valor in cantidad_datos %}
+
+                <tr>
+                    <td>{{clave}}</td>
+
+                    <td>{{valor}}</td>
+
+
+                </tr>
+                {% endfor %}
+
+
+
+            </tbody>
+        </table>
+
+        <br>
+        <h3>Frecuencia por palabras: Salidas</h3>
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+
+                    <th scope="col">Palabra</th>
+                    <th scope="col">Frecuencia</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+
+
+
+                {% for clave_salidas, valor_salidas in cantidad_datos_salidas %}
+
+                <tr>
+                    <td>{{clave_salidas}}</td>
+
+                    <td>{{valor_salidas}}</td>
+
+
+                </tr>
+                {% endfor %}
+
+
+
+            </tbody>
+        </table>
+
+        <br>
+
+        <h3>Frecuencia por palabras: Oportunidades</h3>
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+
+                    <th scope="col">Palabra</th>
+                    <th scope="col">Frecuencia</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+
+
+
+                {% for clave_oportunidad, valor_oportunidad in cantidad_datos_oportunidad %}
+
+                <tr>
+                    <td>{{clave_oportunidad}}</td>
+
+                    <td>{{valor_oportunidad}}</td>
+
+
+                </tr>
+                {% endfor %}
+
+
+
+            </tbody>
+        </table>
+
+
+    </div>
+
+    <div class="container-sm">
+
+        <hr>
+
+
+        <h3>Levenshtein</h3>
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+
+                    <th scope="col" style="background-color: red;">Palabras</th>
+
+                    {% for clave, valor in cantidad_datos %}
+                    <th scope="col">{{clave}}</th>
+                    {% endfor %}
+
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for clave, valor in cantidad_datos %}
+                <tr>
+                    <td>{{clave}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="container-sm">
+        {% for i in arr %}
+        <p>{{i}}</p>
+        {% endfor %}
+
+    </div>
+
+
+
+
+    <script>
+        document.getElementById("extraccion").className = "btn btn-secondary"
+    </script>
+
+
+
+
+    {% endblock frecuencia_uso %} 

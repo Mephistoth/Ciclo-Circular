@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="es">
+
+<head>
+    <title>Ciclo Circular</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <noscript>
+        <link rel="stylesheet" href="{% static 'css/noscript.css' %}" />
+    </noscript>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="is-preload">
+    <br>
+
+    <div id="wrapper">
+
+        <div class="container-sm" style="margin:auto;">
+            {% if user.is_authenticated %}
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <a id="home_admin" href="{% url 'home_procesamiento' %}">Volver al Inicio</a>
+                <a href="{% url 'logout' %}" id="cerrarSesion">Cerrar sesión</a>
+            </div>
+            <br>
+            {% if user.is_staff %}
+            <h3>Bienvenido Admin, {{ user.first_name }}</h3>
+            <h2 class="titulo-seccion text-center my-4">Procesamiento de ideas por etapas</h2>
+            <hr>
+
+            <!-- Seleccionar empresa -->
+            <h3>Seleccione una empresa:</h3>
+            <div class="row mb-4">
+                {% for empresa in empresas %}
+                <div class="col">
+                    <a href="?empresa={{ empresa.id_empresa }}">
+                        <button type="button"
+                            class="btn {% if empresa_seleccionada and empresa.id_empresa == empresa_seleccionada.id_empresa %}btn-success{% endif %}">
+                            {{ empresa.nombre }}
+                        </button>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if empresa_seleccionada %}
+            <hr>
+            <h3>¿Qué etapa deseas ver?</h3>
+
+            <!-- Botones fijos por etapa -->
+            <div class="row">
+                <div class="col-auto"><strong>1.</strong></div>
+                <div class="col">
+                    <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=1">
+                        <button type="button" class="btn {% if etapa_seleccionada == 1 %}btn-success{% endif %}">
+                            Extracción Materia Prima
+                        </button>
+                    </a>
+                </div>
+
+                <div class="col-auto"><strong>2.</strong></div>
+                <div class="col">
+                    <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=2">
+                        <button type="button" class="btn {% if etapa_seleccionada == 2 %}btn-success{% endif %}">
+                            Diseño y Producción
+                        </button>
+                    </a>
+                </div>
+
+                <div class="col-auto"><strong>3.</strong></div>
+                <div class="col">
+                    <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=3">
+                        <button type="button" class="btn {% if etapa_seleccionada == 3 %}btn-success{% endif %}">
+                            Logística
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-auto"><strong>4.</strong></div>
+                <div class="col">
+                    <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=4">
+                        <button type="button" class="btn {% if etapa_seleccionada == 4 %}btn-success{% endif %}">
+                            Compra
+                        </button>
+                    </a>
+                </div>
+
+                <div class="col-auto"><strong>5.</strong></div>
+                <div class="col">
+                    <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=5">
+                        <button type="button" class="btn {% if etapa_seleccionada == 5 %}btn-success{% endif %}">
+                            Uso Consumo
+                        </button>
+                    </a>
+                </div>
+
+                <div class="col-auto"><strong>6.</strong></div>
+                <div class="col">
+                    <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=6">
+                        <button type="button" class="btn {% if etapa_seleccionada == 6 %}btn-success{% endif %}">
+                            Fin de Vida
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mostrar texto concatenado de ideas si hay etapa seleccionada -->
+            {% if texto_concatenado %}
+            <hr>
+            <h3 class="mt-4">Contenido Detectado</h3>
+
+            <form method="POST">
+                {% csrf_token %}
+                <textarea name="texto_concatenado" class="form-control" rows="8"
+                    readonly>{{ texto_concatenado }}</textarea>
+                <br>
+                <button type="submit" class="btn btn-success w-40" style="margin-left: 460px;">Generar Resumen</button>
+            </form>
+            {% endif %}
+
+            {% if resumen_ia %}
+            <hr>
+            <h3 class="mt-4">Resumen Generado</h3>
+            <div class="mb-3">
+                <textarea class="form-control" rows="6" readonly>{{ resumen_ia }}</textarea>
+            </div>
+
+            <div class="text-center mt-3">
+                <form action="{% url 'descargar_resumen' %}" method="get" style="display: inline;">
+                    <input type="hidden" name="resumen" value="{{ resumen_ia }}">
+                    <button type="submit" class="btn btn-primary">
+                        Descargar resumen 200 palabras
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+
+            {% endif %} <!-- empresa_seleccionada -->
+            {% endif %} <!-- user.is_staff -->
+            {% endif %} <!-- user.is_authenticated -->
+        </div>
+    </div>
+    <div id="bg"></div>
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/browser.min.js' %}"></script>
+    <script src="{% static 'js/breakpoints.min.js' %}"></script>
+    <script src="{% static 'js/util.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>
