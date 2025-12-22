@@ -977,11 +977,82 @@ def ingresar_ideas(request, etapa_id=None):
         'mensaje': mensaje
     })
 
+
 def mi_perfil(request):
     registros = RegistroTrabajador.objects.filter(usuario=request.user)
 
+    # Obtener CV actual
+    cv = CVUsuario.objects.filter(usuario=request.user).first()
+
+    # --------------------------
+    # PROCESAR SUBIDA / CAMBIO DE CV
+    # --------------------------
+    if request.method == "POST":
+
+        archivo = request.FILES.get("archivo")
+
+        if not archivo:
+            messages.error(request, "Debe seleccionar un archivo.")
+            return redirect("mi_perfil")
+
+        # Leer bytes del archivo
+        file_bytes = archivo.read()
+
+        # Preparar archivo para extracción de texto
+        file_like = io.BytesIO(file_bytes)
+        file_like.name = archivo.name
+
+        # Extraer texto
+        texto = leer_archivo(file_like)
+
+        # Generar palabras clave con ChatGPT
+        try:
+            palabras_generadas = generar_10_palabras_clave(texto)
+        except Exception as e:
+            print("ERROR al generar palabras clave:", e)
+            palabras_generadas = [None] * 10
+
+        # Eliminar CV anterior
+        CVUsuario.objects.filter(usuario=request.user).delete()
+
+        # Guardar nuevo CV
+        cv = CVUsuario.objects.create(
+            usuario=request.user,
+            archivo=file_bytes,
+            nombre_archivo=archivo.name,
+            palabra1=palabras_generadas[0],
+            palabra2=palabras_generadas[1],
+            palabra3=palabras_generadas[2],
+            palabra4=palabras_generadas[3],
+            palabra5=palabras_generadas[4],
+            palabra6=palabras_generadas[5],
+            palabra7=palabras_generadas[6],
+            palabra8=palabras_generadas[7],
+            palabra9=palabras_generadas[8],
+            palabra10=palabras_generadas[9],
+        )
+
+        messages.success(request, "CV actualizado correctamente.")
+        return redirect("mi_perfil")
+
+    # --------------------------
+    # MOSTRAR PALABRAS EXISTENTES
+    # --------------------------
+    palabras = []
+    if cv:
+        palabras = [
+            cv.palabra1, cv.palabra2, cv.palabra3, cv.palabra4, cv.palabra5,
+            cv.palabra6, cv.palabra7, cv.palabra8, cv.palabra9, cv.palabra10
+        ]
+        palabras = [p for p in palabras if p]
+
+    # --------------------------
+    # RENDERIZAR TEMPLATE
+    # --------------------------
     return render(request, 'mi_perfil/mi_perfil.html', {
-        "registros": registros
+        "registros": registros,
+        "cv": cv,
+        "palabras": palabras
     })
 
 def subir_cv(request):
