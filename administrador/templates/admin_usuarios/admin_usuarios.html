@@ -41,7 +41,7 @@
         <div class="col-auto mb-2">
             <a href="?empresa={{ empresa.id_empresa }}">
                 <button type="button"
-                        class="btn {% if empresa_seleccionada and empresa.id_empresa == empresa_seleccionada.id_empresa %}btn-success{% endif %}">
+                        class="btn {% if empresa_seleccionada and empresa.id_empresa == empresa_seleccionada.id_empresa %}btn-success{% endif %}" style="border-radius:60px;">
                     {{ empresa.nombre }}
                 </button>
             </a>
@@ -81,7 +81,7 @@
                       action="{% url 'quitar_coordinador' coordinador_empresa.id %}">
                     {% csrf_token %}
                     <button class="btn btn-outline-danger"
-                            onclick="return confirm('¿Quitar coordinador de esta empresa?');">
+                            onclick="return confirm('¿Quitar coordinador de esta empresa?');" style="border-radius:60px;">
                         ELIMINAR COORDINADOR
                     </button>
                 </form>
@@ -93,7 +93,7 @@
 {% else %}
 <button class="btn btn-success mt-2"
         data-bs-toggle="modal"
-        data-bs-target="#modalCoordinador">
+        data-bs-target="#modalCoordinador" style="border-radius:60px;">
     Agregar Coordinador
 </button>
 {% endif %}
@@ -105,7 +105,7 @@
     <h3 class="m-0">USUARIOS DE {{ empresa_seleccionada.nombre|upper }}</h3>
 
     <a href="{% url 'crear_usuario' %}?empresa={{ empresa_seleccionada.id_empresa }}"
-       class="btn btn-success">
+       class="btn btn-success" style="border-radius:60px;">
         Crear Nuevo Usuario
     </a>
 </div>
@@ -133,12 +133,12 @@
             <td>
 
                 <form action="{% url 'ver_cv' registro.usuario.id %}" method="GET" style="display:inline;">
-                    <button class="btn btn-info btn-sm">CV</button>
+                    <button class="btn btn-info btn-sm" style="border-radius:60px;">CV</button>
                 </form>
 
                 <form action="{% url 'editar_usuario' registro.usuario.id %}" method="GET" style="display:inline;">
                     <button class="btn btn-warning btn-sm"
-                            style="background-color:#5405d3; border-color:#f8f8f7;">
+                            style="background-color:#5405d3; border-color:#f8f8f7; border-radius:60px;">
                         Modificar
                     </button>
                 </form>
@@ -146,7 +146,7 @@
                 <form action="{% url 'resetear_clave' registro.usuario.id %}" method="POST" style="display:inline;">
                     {% csrf_token %}
                     <button class="btn btn-outline-secondary btn-sm"
-                            onclick="return confirm('¿Enviar nueva clave al email de este usuario?');">
+                            onclick="return confirm('¿Enviar nueva clave al email de este usuario?'); " style="border-radius:60px;">
                         Resetear clave
                     </button>
                 </form>
@@ -154,7 +154,7 @@
                 <form action="{% url 'eliminar_usuario' registro.usuario.id %}" method="POST" style="display:inline;">
                     {% csrf_token %}
                     <button class="btn btn-danger btn-sm"
-                            onclick="return confirm('¿Está seguro que desea eliminar este usuario?');">
+                            onclick="return confirm('¿Está seguro que desea eliminar este usuario?'); " style="border-radius:60px;">
                         Eliminar
                     </button>
                 </form>
@@ -182,7 +182,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Asignar Coordinador</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" ></button>
                 </div>
 
                 <div class="modal-body">
@@ -197,7 +197,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn btn-success" style="border-radius:60px;">
                         Asignar
                     </button>
                 </div>

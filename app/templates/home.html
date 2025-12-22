@@ -34,14 +34,7 @@
             </div>
             <div class="content">
                 <div class="inner">
-                    <h1>Diagnóstico Ciclo Circular</h1>
-
-                    {% if user.is_authenticated %}
-
-
-                    <p>Si deseas realizar tus registros a traves de telegram preciona <a
-                            href="{% url 'agregar_telegram' user.id %}">aqui</a> </p>
-                    {% endif %}
+                    <h1>Plataforma Networking</h1>
 
                 </div>
             </div>
@@ -69,22 +62,29 @@
                 <!--<li><a href="#elements">Elements</a></li>-->
             </nav>
 
-            <nav style="margin-top: 20px;">
-                <ul>
-                    {% if not user.is_staff %}
-                    <li><a href="{% url 'auto_diagnostico' %}">Auto Diagnostico</a></li>
+            <nav style="margin-top: 20px; ">
+                <ul style="border-radius: 60px;">
+                    {% if user.is_authenticated and not user.is_staff %}
+                    <li><a href="{% url 'auto_diagnostico' %}" style="border-radius: 60px; padding-left: 42px; padding-right: 42px;">Auto Diagnostico</a></li>
                     {% endif %}
                 </ul>
-                <ul style="margin-top: 10px;">
+                <ul style="margin-top: 10px; border-radius: 60px; ">
                     {% if user.is_authenticated and not user.is_staff %}
-                    <li><a style="padding-left: 80px;padding-right: 73px;" href="{% url 'ingresar_ideas' %}">Ideas</a>
+                    <li><a style="padding-left: 100px;padding-right: 95px; border-radius: 60px;" href="{% url 'ingresar_ideas' %}">Ideas</a>
                     </li>
                     {% endif %}
                     <!--<li><a href="#elements">Elements</a></li>-->
                 </ul>
-                <ul style="margin-top: 10px;">
+                <ul style="margin-top: 10px; border-radius: 60px; ">
                     {% if user.is_authenticated and not user.is_staff %}
-                    <li><a style="padding-left: 80px;padding-right: 73px;" href="{% url 'mi_perfil' %}">Mis Datos</a>
+                    <li><a style="padding-left: 80px;padding-right: 76px; border-radius: 60px;" href="{% url 'mi_perfil' %}">Mis Datos</a>
+                    </li>
+                    {% endif %}
+                    <!--<li><a href="#elements">Elements</a></li>-->
+                </ul>
+                <ul style="margin-top: 10px; border-radius: 60px; ">
+                    {% if user.is_authenticated and not user.is_staff %}
+                    <li><a style="padding-left: 80px;padding-right: 90px; border-radius: 60px;" href="">Mi pitch</a>
                     </li>
                     {% endif %}
                     <!--<li><a href="#elements">Elements</a></li>-->
@@ -92,9 +92,9 @@
 
                 <!-- ================== COORDINADOR ================== -->
                 {% if user.is_authenticated and user.empresa_coordinador %}
-                <ul style="margin-top: 10px;">
+                <ul style="margin-top: 10px; border-radius: 60px; ">
                     <li>
-                        <a style="padding-left: 80px;padding-right: 73px; font-weight:bold;"
+                        <a style="padding-left: 80px;padding-right: 73px; font-weight:bold; border-radius: 60px;"
                             href="{% url 'panel_coordinador' %}">
                             COORDINADOR
                         </a>
@@ -105,11 +105,11 @@
             </nav>
 
             <nav>
-                <ul style="margin-top: -20px;">
+                <ul style="margin-top: -20px; border-radius: 60px;">
                     {% if user.is_authenticated %}
-                    <li><a href="{% url 'logout' %}">Cerrar Sesion</a></li>
+                    <li><a href="{% url 'logout' %}" style="border-radius: 60px;">Cerrar Sesion</a></li>
                     {% else %}
-                    <li><a href="{% url 'login' %}">inicia Sesion</a></li>
+                    <li><a href="{% url 'login' %}" style="border-radius: 60px;">inicia Sesion</a></li>
                     {% endif %}
                 </ul>
             </nav>

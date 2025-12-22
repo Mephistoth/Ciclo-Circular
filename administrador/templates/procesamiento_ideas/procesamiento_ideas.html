@@ -41,7 +41,7 @@
                 <div class="col">
                     <a href="?empresa={{ empresa.id_empresa }}">
                         <button type="button"
-                            class="btn {% if empresa_seleccionada and empresa.id_empresa == empresa_seleccionada.id_empresa %}btn-success{% endif %}">
+                            class="btn {% if empresa_seleccionada and empresa.id_empresa == empresa_seleccionada.id_empresa %}btn-success{% endif %}" style="border-radius:60px;">
                             {{ empresa.nombre }}
                         </button>
                     </a>
@@ -58,7 +58,7 @@
                 <div class="col-auto"><strong>1.</strong></div>
                 <div class="col">
                     <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=1">
-                        <button type="button" class="btn {% if etapa_seleccionada == 1 %}btn-success{% endif %}">
+                        <button type="button" class="btn {% if etapa_seleccionada == 1 %}btn-success{% endif %}" style="border-radius:60px;">
                             Extracción Materia Prima
                         </button>
                     </a>
@@ -67,7 +67,7 @@
                 <div class="col-auto"><strong>2.</strong></div>
                 <div class="col">
                     <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=2">
-                        <button type="button" class="btn {% if etapa_seleccionada == 2 %}btn-success{% endif %}">
+                        <button type="button" class="btn {% if etapa_seleccionada == 2 %}btn-success{% endif %}" style="border-radius:60px;">
                             Diseño y Producción
                         </button>
                     </a>
@@ -76,7 +76,7 @@
                 <div class="col-auto"><strong>3.</strong></div>
                 <div class="col">
                     <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=3">
-                        <button type="button" class="btn {% if etapa_seleccionada == 3 %}btn-success{% endif %}">
+                        <button type="button" class="btn {% if etapa_seleccionada == 3 %}btn-success{% endif %}" style="border-radius:60px;">
                             Logística
                         </button>
                     </a>
@@ -89,7 +89,7 @@
                 <div class="col-auto"><strong>4.</strong></div>
                 <div class="col">
                     <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=4">
-                        <button type="button" class="btn {% if etapa_seleccionada == 4 %}btn-success{% endif %}">
+                        <button type="button" class="btn {% if etapa_seleccionada == 4 %}btn-success{% endif %}" style="border-radius:60px;">
                             Compra
                         </button>
                     </a>
@@ -98,7 +98,7 @@
                 <div class="col-auto"><strong>5.</strong></div>
                 <div class="col">
                     <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=5">
-                        <button type="button" class="btn {% if etapa_seleccionada == 5 %}btn-success{% endif %}">
+                        <button type="button" class="btn {% if etapa_seleccionada == 5 %}btn-success{% endif %}" style="border-radius:60px;">
                             Uso Consumo
                         </button>
                     </a>
@@ -107,7 +107,7 @@
                 <div class="col-auto"><strong>6.</strong></div>
                 <div class="col">
                     <a href="?empresa={{ empresa_seleccionada.id_empresa }}&etapa=6">
-                        <button type="button" class="btn {% if etapa_seleccionada == 6 %}btn-success{% endif %}">
+                        <button type="button" class="btn {% if etapa_seleccionada == 6 %}btn-success{% endif %}" style="border-radius:60px;">
                             Fin de Vida
                         </button>
                     </a>
@@ -124,7 +124,7 @@
                 <textarea name="texto_concatenado" class="form-control" rows="8"
                     readonly>{{ texto_concatenado }}</textarea>
                 <br>
-                <button type="submit" class="btn btn-success w-40" style="margin-left: 460px;">Generar Resumen</button>
+                <button type="submit" class="btn btn-success w-40" style="margin-left: 460px; border-radius:60px">Generar Resumen</button>
             </form>
             {% endif %}
 
@@ -138,7 +138,7 @@
             <div class="text-center mt-3">
                 <form action="{% url 'descargar_resumen' %}" method="get" style="display: inline;">
                     <input type="hidden" name="resumen" value="{{ resumen_ia }}">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" style="border-radius:60px;">
                         Descargar resumen 200 palabras
                     </button>
                 </form>

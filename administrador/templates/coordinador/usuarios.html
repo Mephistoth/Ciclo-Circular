@@ -57,7 +57,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h3 class="m-0">USUARIOS DE {{ user.empresa_coordinador.nombre|upper }}</h3>
 
-                <a href="{% url 'crear_usuario_coordinacion' %}" class="btn btn-success">
+                <a href="{% url 'crear_usuario_coordinacion' %}" class="btn btn-success" style="border-radius:60px;">
                     Crear Nuevo Usuario
                 </a>
             </div>
@@ -86,13 +86,13 @@
 
                             <form action="{% url 'ver_cv_coordinacion' registro.usuario.id %}" method="GET"
                                 style="display:inline;">
-                                <button class="btn btn-info btn-sm">CV</button>
+                                <button class="btn btn-info btn-sm" style="border-radius: 60px;">CV</button>
                             </form>
 
                             <form action="{% url 'editar_usuario_coordinacion' registro.usuario.id %}" method="GET"
                                 style="display:inline;">
                                 <button class="btn btn-warning btn-sm"
-                                    style="background-color:#5405d3; border-color:#f8f8f7;">
+                                    style="background-color:#5405d3; border-color:#f8f8f7; border-radius:60px;">
                                     Modificar
                                 </button>
                             </form>
@@ -101,7 +101,7 @@
                                 style="display:inline;">
                                 {% csrf_token %}
                                 <button class="btn btn-outline-secondary btn-sm"
-                                    onclick="return confirm('¿Enviar nueva clave al email de este usuario?');">
+                                    onclick="return confirm('¿Enviar nueva clave al email de este usuario?');" style="border-radius:60px;">
                                     Resetear clave
                                 </button>
                             </form>
@@ -110,7 +110,7 @@
                                 style="display:inline;">
                                 {% csrf_token %}
                                 <button class="btn btn-danger btn-sm"
-                                    onclick="return confirm('¿Está seguro que desea eliminar este usuario?');">
+                                    onclick="return confirm('¿Está seguro que desea eliminar este usuario?');" style="border-radius:60px;">
                                     Eliminar
                                 </button>
                             </form>

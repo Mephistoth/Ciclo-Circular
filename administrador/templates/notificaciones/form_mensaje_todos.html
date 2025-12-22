@@ -30,7 +30,7 @@
 
             <div class="input-group">
                 <input type="file" name="archivo" id="archivoInput" class="form-control">
-                <button type="button" class="btn btn-outline-danger" onclick="limpiarArchivo()">
+                <button type="button" class="btn btn-outline-danger" onclick="limpiarArchivo()" style="border-radius: 60px;">
                     Limpiar
                 </button>
             </div>
@@ -40,12 +40,12 @@
             <div class="d-flex justify-content-between mt-4">
 
                 <!-- Enviar con doble confirmación -->
-                <button type="submit" class="btn btn-success w-50 ms-2" onclick="return confirmarEnvio();">
+                <button type="submit" class="btn btn-success w-50 ms-2" onclick="return confirmarEnvio();" style="margin-right: 10px;">
                     Enviar mensaje
                 </button>
 
                 <a href="/administrador/notificaciones/?empresa={{ id_empresa }}" 
-                   class="btn btn-secondary w-50 me-2" style="margin-left: 10px;">
+                   class="btn btn-secondary w-50 me-2" style="margin-left: 10px; border-radius: 60px;">
                     Cancelar
                 </a>
             </div>

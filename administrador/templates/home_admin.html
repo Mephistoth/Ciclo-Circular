@@ -61,7 +61,7 @@
 
                 {% for empresa in empresas %}
                 <div class="col">
-                    <a href="{% url 'home_empresa' empresa.id_empresa %}"><button type="button" id="{{ empresa.id_empresa }}">{{empresa.nombre }}</button></a>
+                    <a href="{% url 'home_empresa' empresa.id_empresa %}"><button type="button" id="{{ empresa.id_empresa }}" style="border-radius:60px;">{{empresa.nombre }}</button></a>
                 </div>
                 {% endfor %}
 
@@ -74,7 +74,7 @@
 
         {% else %}
         <h1>Registra la empresa y el area a la que perteneces!!!!</h1>
-        <a href="{% url 'agregar_Area' user.id  %}"><button type="button">Aqui</button></a>
+        <a href="{% url 'agregar_Area' user.id  %}"><button type="button" style="border-radius:60px;">Aqui</button></a>
 
         {% endif %}
 

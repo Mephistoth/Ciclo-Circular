@@ -13,19 +13,19 @@
 
         <div class="col">
             <a href="{% url 'entradas_extraccion' %}?empresa={{ empresa_seleccionada.id_empresa }}">
-                <button type="button" id="entrada">Tabla Entradas</button>
+                <button type="button" id="entrada" style="border-radius:60px;">Tabla Entradas</button>
             </a>
         </div>
 
         <div class="col">
             <a href="{% url 'salidas_extraccion' %}?empresa={{ empresa_seleccionada.id_empresa }}">
-                <button type="button" id="salida" >Tabla Salidas</button>
+                <button type="button" id="salida" style="border-radius:60px;">Tabla Salidas</button>
             </a>
         </div>
 
         <div class="col">
             <a href="{% url 'oportuniades_extraccion' %}?empresa={{ empresa_seleccionada.id_empresa }}">
-                <button type="button" id="oportunidad">Tabla Oportunidades</button>
+                <button type="button" id="oportunidad" style="border-radius:60px;">Tabla Oportunidades</button>
             </a>
         </div>
 
@@ -36,20 +36,25 @@
     <h4>Opciones de extraccion de materia prima</h4>
     <div class="row">
         <div class="col">
-            <a href="{% url 'agregar_entrada_extraccion' %}"><button type="button" id="entrada">Entradas</button></a>
+            <a href="{% url 'agregar_entrada_extraccion' %}">
+                <button type="button" id="entrada" style="border-radius:60px;">Entradas</button>
+            </a>
         </div>
         <div class="col">
-            <a href="{% url 'agregar_salida_extraccion' %}"><button type="button" id="salida">Salidas</button></a>
+            <a href="{% url 'agregar_salida_extraccion' %}">
+                <button type="button" id="salida" style="border-radius:60px;">Salidas</button>
+            </a>
         </div>
         <div class="col">
-            <a href="{% url 'agregar_oportunidad_extraccion' %}"><button type="button"
-                    id="oportunidad">Oportunidades</button></a>
+            <a href="{% url 'agregar_oportunidad_extraccion' %}">
+                <button type="button" id="oportunidad" style="border-radius:60px;">Oportunidades</button>
+            </a>
         </div>
     </div>
     {% endif %}
-</div>
-</div>
-<hr>
+    </div>
+    </div>
+    <hr>
 
 <script>
     document.getElementById("extraccion").className = "btn btn-success"; 

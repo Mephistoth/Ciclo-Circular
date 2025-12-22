@@ -63,7 +63,7 @@
                 <div class="col">
                     <a href="?etapa={{ slug }}">
                         <button type="button"
-                            class="btn {% if etapa == slug %}btn-success{% endif %} w-100">
+                            class="btn {% if etapa == slug %}btn-success{% endif %} w-100" style="border-radius:60px;">
                             {{ forloop.counter }}. {{ nombre }}
                         </button>
                     </a>
@@ -80,7 +80,7 @@
                     {% for a in areas %}
                     <div class="col-4 mb-3">
                         <a href="?etapa={{ etapa }}&area={{ a.id_area }}">
-                            <button type="button" id="area_{{ a.id_area }}" class="btn btn-outline w-100">
+                            <button type="button" id="area_{{ a.id_area }}" class="btn btn-outline w-100" style="border-radius:60px;">
                                 {{ a.nombre }}
                             </button>
                         </a>

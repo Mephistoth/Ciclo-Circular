@@ -41,7 +41,7 @@
                 <div class="col">
                     <a href="?empresa={{ empresa.id_empresa }}">
                         <button type="button"
-                            class="btn {% if empresa_seleccionada and empresa.id_empresa == empresa_seleccionada.id_empresa %}btn-success{% endif %}">
+                            class="btn {% if empresa_seleccionada and empresa.id_empresa == empresa_seleccionada.id_empresa %}btn-success{% endif %}" style="border-radius:60px;">
                             {{ empresa.nombre }}
                         </button>
                     </a>
@@ -58,7 +58,7 @@
                 <div class="col">
                     <a href="?empresa={{ empresa_seleccionada.id_empresa }}&area={{ area.id_area }}">
                         <button type="button"
-                            class="btn {% if area_seleccionada and area.id_area == area_seleccionada.id_area %}btn-success{% endif %}">
+                            class="btn {% if area_seleccionada and area.id_area == area_seleccionada.id_area %}btn-success{% endif %}" style="border-radius:60px;">
                             {{ area.nombre }}
                         </button>
                     </a>
@@ -77,7 +77,7 @@
                     <textarea class="form-control" name="texto_concatenado" rows="10">{{ texto_concatenado }}</textarea>
                     <br>
                     <div class="d-flex justify-content-center mt-3">
-                        <button class="btn btn-success">Generar Resumen</button>
+                        <button class="btn btn-success" style="border-radius:60px;">Generar Resumen</button>
                     </div>
                 </form>
                 {% endif %}
@@ -90,7 +90,7 @@
                 <div class="text-center mt-3">
                     <form action="{% url 'descargar_resumen' %}" method="get" style="display: inline;">
                         <input type="hidden" name="resumen" value="{{ resumen_ia|escape }}">
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-success" style="border-radius:60px;">
                             Descargar resumen 200 palabras
                         </button>
                     </form>

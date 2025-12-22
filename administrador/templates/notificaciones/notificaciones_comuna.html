@@ -30,7 +30,7 @@
             {% for c in comunas %}
             <div class="col-auto mb-3">
                 <a href="?comuna={{ c }}">
-                    <button class="btn {% if comuna_seleccionada == c %}btn-success{% endif %}">
+                    <button class="btn {% if comuna_seleccionada == c %}btn-success{% endif %}" style="border-radius:60px;">
                         {{ c }}
                     </button>
                 </a>
@@ -43,7 +43,7 @@
 
         <div class="text-center mt-4">
             <a href="{% url 'form_mensaje_comuna' comuna_seleccionada %}" class="btn btn-outline-light no-hover-white"
-                style="padding:15px; font-size:20px; border:2px solid">
+                style="padding:15px; font-size:20px; border:2px solid white; border-radius:60px;">
                 ENVIAR EMAIL A USUARIOS DE {{ comuna_seleccionada }}
             </a>
         </div>

@@ -42,7 +42,7 @@
                 <div class="col">
                     <a href="?empresa={{ empresa.id_empresa }}">
                         <button type="button"
-                            class="btn {% if empresa_seleccionada and empresa.id_empresa == empresa_seleccionada.id_empresa %}btn-success{% endif %}">
+                            class="btn {% if empresa_seleccionada and empresa.id_empresa == empresa_seleccionada.id_empresa %}btn-success{% endif %}" style="border-radius:60px;">
                             {{ empresa.nombre }}
                         </button>
                     </a>
@@ -57,7 +57,7 @@
             <form method="post" class="mb-4">
                 {% csrf_token %}
                 <div class="d-flex justify-content-start mt-3">
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn btn-success" style="border-radius:60px;">
                         Generar Match por palabras clave
                     </button>
                 </div>

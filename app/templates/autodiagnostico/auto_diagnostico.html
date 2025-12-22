@@ -31,49 +31,49 @@
         <div class="container-sm">
             {% if user.is_authenticated %}
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <a id="home_admin" href="{% url 'home' %}">Volver al Inicio</a> <a href="{% url 'logout' %}"
-                    id="cerrarSesion">Cerrar sesión</a>
+            <a id="home_admin" href="{% url 'home' %}">Volver al Inicio</a> <a href="{% url 'logout' %}"
+                id="cerrarSesion">Cerrar sesión</a>
             </div>
             {% if registros %}
             <div class="container-sm">
-                <div class="row">
+            <div class="row">
 
-                    {% if user.is_staff %}
-                    <h3>Bienvenido Admin, {{ user.first_name }}</h3>
-                    {% else %}
-                    {% for i in registros %}
-                    <div class="mb-2">
-                        <h4>Empresa: {{ i.id_area.id_empresa.nombre}}</h4>
-                        <h4>Área: {{ i.id_area.nombre}}</h4>
-                    </div>
-                    <h3>Hola, bienvenido {{user.first_name}}</h3>
-                    {% endfor %}
-
-                    {% endif %}
-
-
-
+                {% if user.is_staff %}
+                <h3>Bienvenido Admin, {{ user.first_name }}</h3>
+                {% else %}
+                {% for i in registros %}
+                <div class="mb-2">
+                <h4>Empresa: {{ i.id_area.id_empresa.nombre}}</h4>
+                <h4>Área: {{ i.id_area.nombre}}</h4>
                 </div>
+                <h3>Hola, bienvenido {{user.first_name}}</h3>
+                {% endfor %}
+
+                {% endif %}
+
+
+
+            </div>
 
             </div>
 
             <div>
-                {% if user.is_staff %}
-                <h2 class="titulo-seccion text-center my-4">REGISTROS</h2>
+            {% if user.is_staff %}
+            <h2 class="titulo-seccion text-center my-4">REGISTROS</h2>
 
-                <h3>Seleccione una empresa:</h3>
-                <div class="row mb-4">
+            <h3>Seleccione una empresa:</h3>
+            <div class="row mb-4">
 
-                    {% for empresa in empresas %}
-                    <div class="col">
-                        <a href="{% url 'auto_diagnostico_empresa' empresa.id_empresa %}"><button type="button" class="btn 
-                               {% if empresa_seleccionada and empresa.id_empresa == empresa_seleccionada.id_empresa %}
-                                   btn-success
-                               {% endif %}">{{empresa.nombre }}</button></a>
-                    </div>
-                    {% endfor %}
+                {% for empresa in empresas %}
+                <div class="col">
+                <a href="{% url 'auto_diagnostico_empresa' empresa.id_empresa %}"><button type="button" class="btn 
+                       {% if empresa_seleccionada and empresa.id_empresa == empresa_seleccionada.id_empresa %}
+                       btn-success
+                       {% endif %}" style="border-radius: 60px;">{{empresa.nombre }}</button></a>
                 </div>
-                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
             </div>
 
             <hr>
@@ -81,35 +81,35 @@
             {% if empresa_seleccionada %}
             <h3>¿Qué etapa deseas ver?</h3>
             <div class="row">
-                <div class="col-auto"><strong>1.</strong></div>
-                <div class="col">
-                    <a href="{% url 'extraccion_materiaPrima' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button" id="extraccion"
-                            class="selected">Extracción Materia Prima</button></a>
-                </div>
-                <div class="col-auto"><strong>2.</strong></div>
-                <div class="col">
-                    <a href="{% url 'diseño_Produccion' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button" id="diseño">Diseño y
-                            producción</button></a>
-                </div>
-                <div class="col-auto"><strong>3.</strong></div>
-                <div class="col">
-                    <a href="{% url 'logistica' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button" id="logistica">Logística</button></a>
-                </div>
+            <div class="col-auto"><strong>1.</strong></div>
+            <div class="col">
+                <a href="{% url 'extraccion_materiaPrima' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button" id="extraccion"
+                    class="selected" style="border-radius: 60px;">Extracción Materia Prima</button></a>
+            </div>
+            <div class="col-auto"><strong>2.</strong></div>
+            <div class="col">
+                <a href="{% url 'diseño_Produccion' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button" id="diseño" style="border-radius: 60px;">Diseño y
+                    producción</button></a>
+            </div>
+            <div class="col-auto"><strong>3.</strong></div>
+            <div class="col">
+                <a href="{% url 'logistica' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button" id="logistica" style="border-radius: 60px;">Logística</button></a>
+            </div>
             </div>
             <br>
             <div class="row">
-                <div class="col-auto"><strong>4.</strong></div>
-                <div class="col">
-                    <a href="{% url 'compra' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button" id="compra">Compra</button></a>
-                </div>
-                <div class="col-auto"><strong>5.</strong></div>
-                <div class="col">
-                    <a href="{% url 'uso_consumo' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button" id="uso">Uso consumo</button></a>
-                </div>
-                <div class="col-auto"><strong>6.</strong></div>
-                <div class="col">
-                    <a href="{% url 'fin_vida' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button" id="fin">Fin de vida</button></a>
-                </div>
+            <div class="col-auto"><strong>4.</strong></div>
+            <div class="col">
+                <a href="{% url 'compra' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button" id="compra" style="border-radius: 60px;">Compra</button></a>
+            </div>
+            <div class="col-auto"><strong>5.</strong></div>
+            <div class="col">
+                <a href="{% url 'uso_consumo' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button" id="uso" style="border-radius: 60px;">Uso consumo</button></a>
+            </div>
+            <div class="col-auto"><strong>6.</strong></div>
+            <div class="col">
+                <a href="{% url 'fin_vida' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button" id="fin" style="border-radius: 60px;">Fin de vida</button></a>
+            </div>
             </div>
             {% endif %}
             {% endif %}
@@ -117,34 +117,34 @@
             {% if not user.is_staff %}
             <h3>¿Qué etapa deseas ver?</h3>
             <div class="row">
-                <div class="col-auto"><strong>1.</strong></div>
-                <div class="col">
-                    <a href="{% url 'extraccion_materiaPrima' %}"><button type="button" id="extraccion"
-                            class="selected">Extracción Materia Prima</button></a>
-                </div>
-                <div class="col-auto"><strong>2.</strong></div>
-                <div class="col">
-                    <a href="{% url 'diseño_Produccion' %}"><button type="button" id="diseño">Diseño y
-                            producción</button></a>
-                </div>
-                <div class="col-auto"><strong>3.</strong></div>
-                <div class="col">
-                    <a href="{% url 'logistica' %}"><button type="button" id="logistica">Logística</button></a>
-                </div>
+            <div class="col-auto"><strong>1.</strong></div>
+            <div class="col">
+                <a href="{% url 'extraccion_materiaPrima' %}"><button type="button" id="extraccion"
+                    class="selected" style="border-radius: 60px;">Extracción Materia Prima</button></a>
+            </div>
+            <div class="col-auto"><strong>2.</strong></div>
+            <div class="col">
+                <a href="{% url 'diseño_Produccion' %}"><button type="button" id="diseño" style="border-radius: 60px;">Diseño y
+                    producción</button></a>
+            </div>
+            <div class="col-auto"><strong>3.</strong></div>
+            <div class="col">
+                <a href="{% url 'logistica' %}"><button type="button" id="logistica" style="border-radius: 60px;">Logística</button></a>
+            </div>
             </div>
             <br>
             <div class="row">
             <div class="col-auto"><strong>4.</strong></div>
             <div class="col">
-                <a href="{% url 'compra' %}"><button type="button" id="compra">Compra</button></a>
+            <a href="{% url 'compra' %}"><button type="button" id="compra" style="border-radius: 60px;">Compra</button></a>
             </div>
             <div class="col-auto"><strong>5.</strong></div>
             <div class="col">
-                <a href="{% url 'uso_consumo' %}"><button type="button" id="uso">Uso consumo</button></a>
+            <a href="{% url 'uso_consumo' %}"><button type="button" id="uso" style="border-radius: 60px;">Uso consumo</button></a>
             </div>
             <div class="col-auto"><strong>6.</strong></div>
             <div class="col">
-                <a href="{% url 'fin_vida' %}"><button type="button" id="fin">Fin de vida</button></a>
+            <a href="{% url 'fin_vida' %}"><button type="button" id="fin" style="border-radius: 60px;">Fin de vida</button></a>
             </div>
         </div>
         {% endif %}

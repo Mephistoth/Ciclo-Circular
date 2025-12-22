@@ -11,15 +11,15 @@
 
         <div class="col">
             <a href="{% url 'entradas_compra' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button"
-                    id="entrada">Tabla Entradas</button></a>
+                    id="entrada" style="border-radius:60px;">Tabla Entradas</button></a>
         </div>
         <div class="col">
             <a href="{% url 'salida_compra' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button"
-                    id="salida">Tabla Salidas</button></a>
+                    id="salida" style="border-radius:60px;">Tabla Salidas</button></a>
         </div>
         <div class="col">
             <a href="{% url 'oportunidad_compra' %}?empresa={{ empresa_seleccionada.id_empresa }}"><button type="button"
-                    id="oportunidad">Tabla Oportunidades</button></a>
+                    id="oportunidad" style="border-radius:60px;">Tabla Oportunidades</button></a>
         </div>
 
         {% else %}
@@ -27,14 +27,14 @@
         <h4>Opciones de extraccion de compra</h4>
         <div class="row">
             <div class="col">
-                <a href="{% url 'agregar_entrada_compra' %}"><button type="button" id="entrada">Entradas</button></a>
+                <a href="{% url 'agregar_entrada_compra' %}"><button type="button" id="entrada" style="border-radius:60px;">Entradas</button></a>
             </div>
             <div class="col">
-                <a href="{% url 'agregar_salida_compra' %}"><button type="button" id="salida">Salidas</button></a>
+                <a href="{% url 'agregar_salida_compra' %}"><button type="button" id="salida" style="border-radius:60px;">Salidas</button></a>
             </div>
             <div class="col">
                 <a href="{% url 'agregar_oportunidad_compra' %}"><button type="button"
-                        id="oportunidad">Oportunidades</button></a>
+                        id="oportunidad" style="border-radius:60px;">Oportunidades</button></a>
             </div>
             {% endif %}
         </div>

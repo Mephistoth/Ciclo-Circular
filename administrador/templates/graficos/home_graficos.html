@@ -65,7 +65,7 @@
 
                 {% for e in empresas %}
                 <div class="col">
-                    <a href="{% url 'area_graficos' e.id_empresa %}"><button type="button" id="{{ e.id_empresa }}">{{e.nombre }}</button></a>
+                    <a href="{% url 'area_graficos' e.id_empresa %}"><button type="button" id="{{ e.id_empresa }}" style="border-radius:60px;">{{e.nombre }}</button></a>
                 </div>
                 {% endfor %}
 

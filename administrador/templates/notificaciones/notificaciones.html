@@ -44,7 +44,7 @@
                 <div class="col-auto">
                     <a href="?empresa={{ e.id_empresa__id_empresa }}">
                         <button type="button"
-                            class="btn {% if empresa_id == e.id_empresa__id_empresa|stringformat:'s' %}btn-success{% endif %}">
+                            class="btn {% if empresa_id == e.id_empresa__id_empresa|stringformat:'s' %}btn-success{% endif %}" style="border-radius:60px;">
                             {{ e.id_empresa__nombre }}
                         </button>
                     </a>
@@ -58,7 +58,7 @@
             <!-- Botón enviar recordatorio a faltantes -->
             <div class="text-center mt-4">
                 <a href="{% url 'enviar_recordatorio' empresa_id %}" class="btn btn-outline-light no-hover-white"
-                    style="padding:15px; font-size:20px; border: 2px solid">
+                    style="padding:15px; font-size:20px; border: 2px solid white; border-radius:60px;">
                     ENVIAR EMAIL RECORDATORIO A FALTANTES
                 </a>
             </div>
@@ -86,7 +86,7 @@
             {% if empresa_id %}
             <div class="text-center mt-5">
                 <a href="{% url 'form_mensaje_todos' empresa_id %}" class="btn btn-outline-light no-hover-white"
-                    style="padding:15px; font-size:20px; border: 2px solid">
+                    style="padding:15px; font-size:20px; border: 2px solid white; border-radius:60px;">
                     ENVIAR EMAIL A TODOS LOS USUARIOS
                 </a>
 

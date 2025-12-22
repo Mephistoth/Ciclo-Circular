@@ -25,18 +25,18 @@
 
             <br>
 
-            <label class="fw-bold">Adjuntar archivo (opcional):</label>
+            <label class="fw-bold" >Adjuntar archivo (opcional):</label>
             <div class="input-group">
                 <input type="file" name="archivo" id="archivoInput" class="form-control">
-                <button type="button" class="btn btn-outline-danger" onclick="archivoInput.value=''">Limpiar</button>
+                <button type="button" class="btn btn-outline-danger" onclick="archivoInput.value=''" style="border-radius: 60px;">Limpiar</button>
             </div>
 
             <br>
 
             <div class="d-flex justify-content-between mt-4">
-                <button type="submit" class="btn btn-success w-50">Enviar</button>
+                <button type="submit" class="btn btn-success w-50" style="border-radius: 60px;">Enviar</button>
 
-                <a href="{% url 'notificaciones_comuna' %}" class="btn btn-secondary w-50 ms-2">Cancelar</a>
+                <a href="{% url 'notificaciones_comuna' %}" class="btn btn-secondary w-50 ms-2" style="border-radius: 60px;">Cancelar</a>
             </div>
 
         </form>

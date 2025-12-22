@@ -50,7 +50,7 @@
                 <div class="col-auto"><strong>1.</strong></div>
                 <div class="col">
                     <a href="{% url 'ingresar_idea' 1 %}">
-                        <button type="button" class="btn {% if etapa and etapa.id_etapa == 1 %}btn-success{% endif %}">
+                        <button type="button" class="btn {% if etapa and etapa.id_etapa == 1 %}btn-success{% endif %}" style="border-radius:60px;">
                             Extracción Materia Prima
                         </button>
                     </a>
@@ -59,7 +59,7 @@
                 <div class="col-auto"><strong>2.</strong></div>
                 <div class="col">
                     <a href="{% url 'ingresar_idea' 2 %}">
-                        <button type="button" class="btn {% if etapa and etapa.id_etapa == 2 %}btn-success{% endif %}">
+                        <button type="button" class="btn {% if etapa and etapa.id_etapa == 2 %}btn-success{% endif %}" style="border-radius:60px;">
                             Diseño y producción
                         </button>
                     </a>
@@ -68,7 +68,7 @@
                 <div class="col-auto"><strong>3.</strong></div>
                 <div class="col">
                     <a href="{% url 'ingresar_idea' 3 %}">
-                        <button type="button" class="btn {% if etapa and etapa.id_etapa == 3 %}btn-success{% endif %}">
+                        <button type="button" class="btn {% if etapa and etapa.id_etapa == 3 %}btn-success{% endif %}" style="border-radius:60px;">
                             Logística
                         </button>
                     </a>
@@ -81,7 +81,7 @@
                 <div class="col-auto"><strong>4.</strong></div>
                 <div class="col">
                     <a href="{% url 'ingresar_idea' 4 %}">
-                        <button type="button" class="btn {% if etapa and etapa.id_etapa == 4 %}btn-success{% endif %}">
+                        <button type="button" class="btn {% if etapa and etapa.id_etapa == 4 %}btn-success{% endif %}" style="border-radius:60px;">
                             Compra
                         </button>
                     </a>
@@ -90,7 +90,7 @@
                 <div class="col-auto"><strong>5.</strong></div>
                 <div class="col">
                     <a href="{% url 'ingresar_idea' 5 %}">
-                        <button type="button" class="btn {% if etapa and etapa.id_etapa == 5 %}btn-success{% endif %}">
+                        <button type="button" class="btn {% if etapa and etapa.id_etapa == 5 %}btn-success{% endif %}" style="border-radius:60px;">
                             Uso consumo
                         </button>
                     </a>
@@ -99,7 +99,7 @@
                 <div class="col-auto"><strong>6.</strong></div>
                 <div class="col">
                     <a href="{% url 'ingresar_idea' 6 %}">
-                        <button type="button" class="btn {% if etapa and etapa.id_etapa == 6 %}btn-success{% endif %}">
+                        <button type="button" class="btn {% if etapa and etapa.id_etapa == 6 %}btn-success{% endif %}" style="border-radius:60px;">
                             Fin de vida
                         </button>
                     </a>
@@ -118,7 +118,7 @@
                     <textarea id="idea" name="texto" class="form-control" rows="6"
                         placeholder="Escribe tu idea aquí..."></textarea>
                 </div>
-                <button type="submit" class="btn btn-success d-block mx-auto">Guardar Idea</button>
+                <button type="submit" class="btn btn-success d-block mx-auto" style="border-radius:60px;">Guardar Idea</button>
             </form>
             {% endif %}
 
