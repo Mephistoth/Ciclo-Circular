@@ -5985,3 +5985,75 @@ def resetear_clave_coordinacion(request, user_id):
     )
 
     return redirect("coordina_usuarios")
+
+def procesamiento_cvs(request):
+    empresas = Empresa.objects.all()
+
+    empresa_id = request.GET.get("empresa")
+    empresa_seleccionada = None
+    usuarios = []
+    matriz_con_usuarios = []
+    frecuencias = {}
+    todas_las_palabras = []
+
+    if empresa_id:
+        empresa_seleccionada = Empresa.objects.get(id_empresa=empresa_id)
+
+        # Usuarios de la empresa que tengan CV cargado
+        usuarios = Usuario.objects.filter(
+            registrotrabajador__id_area__id_empresa__id_empresa=empresa_id,
+            cvusuario__isnull=False
+        ).distinct()
+
+        # Si el usuario presiona el botón "Procesar"
+        if request.method == "POST":
+            lista_palabras = []
+
+            # Extraer las 10 palabras clave de cada usuario
+            for usr in usuarios:
+                cv = CVUsuario.objects.filter(usuario=usr).first()
+
+                if cv:
+                    palabras = [
+                        cv.palabra1, cv.palabra2, cv.palabra3, cv.palabra4, cv.palabra5,
+                        cv.palabra6, cv.palabra7, cv.palabra8, cv.palabra9, cv.palabra10
+                    ]
+                    palabras = [p.strip().lower() for p in palabras if p]
+                else:
+                    palabras = []
+
+                lista_palabras.append(palabras)
+
+                # Agregar al listado total para frecuencia
+                todas_las_palabras.extend(palabras)
+
+            tamaño = len(usuarios)
+
+            # Crear matriz NxN
+            matriz = [[0] * tamaño for _ in range(tamaño)]
+
+            # Calcular coincidencias
+            for i in range(tamaño):
+                for j in range(tamaño):
+
+                    if i == j:
+                        matriz[i][j] = 10
+                        continue
+
+                    coincidencias = len(set(lista_palabras[i]) & set(lista_palabras[j]))
+                    matriz[i][j] = coincidencias
+
+            # Emparejar usuario con su fila de la matriz
+            matriz_con_usuarios = list(zip(usuarios, matriz))
+
+            # ======== CALCULAR FRECUENCIA TOTAL DE PALABRAS =========
+            frecuencias = dict(Counter(todas_las_palabras))
+
+    return render(request, "procesamiento_cvs/procesamiento_cvs.html", {
+        "empresas": empresas,
+        "empresa_seleccionada": empresa_seleccionada,
+        "usuarios": usuarios,
+        "matriz_con_usuarios": matriz_con_usuarios,
+        "frecuencias": frecuencias,
+        "todas_las_palabras": todas_las_palabras,
+    })
