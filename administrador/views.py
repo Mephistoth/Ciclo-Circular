@@ -13,7 +13,7 @@ from pipes import Template
 from urllib import request
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test, login_required
-from app.models import RegistroTrabajador, Etapa, Entrada, Salida, Oportunidades, Empresa, AreaEmpresa, Idea, CVUsuario
+from app.models import RegistroTrabajador, Etapa, Entrada, Salida, Oportunidades, Empresa, AreaEmpresa, Idea, CVUsuario, Oferta, Necesidad
 from user.models import Usuario
 from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
@@ -6056,4 +6056,79 @@ def procesamiento_cvs(request):
         "matriz_con_usuarios": matriz_con_usuarios,
         "frecuencias": frecuencias,
         "todas_las_palabras": todas_las_palabras,
+    })
+
+from collections import Counter
+
+def procesamiento_ofrezco_necesito(request):
+    empresas = Empresa.objects.all()
+    empresa_id = request.GET.get("empresa")
+    empresa_seleccionada = None
+    usuarios = []
+    matriz_ofrezco_necesito = []
+    frecuencias_ofrezco = {}
+    frecuencias_necesito = {}
+
+    if empresa_id:
+        empresa_seleccionada = Empresa.objects.get(id_empresa=empresa_id)
+
+        # Usuarios de la empresa
+        usuarios = Usuario.objects.filter(
+            registrotrabajador__id_area__id_empresa__id_empresa=empresa_id
+        ).distinct()
+
+        if request.method == "POST":
+
+            lista_ofrezco = []
+            lista_necesito = []
+
+            todas_palabras_ofrezco = []
+            todas_palabras_necesito = []
+
+            for usr in usuarios:
+                # ---------- PALABRAS OFREZCO ----------
+                ofertas = Oferta.objects.filter(usuario=usr)
+                ofrezco = []
+                for oferta in ofertas:
+                    for campo in ["palabra1", "palabra2", "palabra3"]:
+                        val = getattr(oferta, campo)
+                        if val:
+                            val_clean = val.strip().lower()
+                            ofrezco.append(val_clean)
+                            todas_palabras_ofrezco.append(val_clean)
+                lista_ofrezco.append(ofrezco)
+
+                # ---------- PALABRAS NECESITO ----------
+                necesidades = Necesidad.objects.filter(usuario=usr)
+                necesito = []
+                for necesidad in necesidades:
+                    for campo in ["palabra1", "palabra2", "palabra3"]:
+                        val = getattr(necesidad, campo)
+                        if val:
+                            val_clean = val.strip().lower()
+                            necesito.append(val_clean)
+                            todas_palabras_necesito.append(val_clean)
+                lista_necesito.append(necesito)
+
+            # ---------- MATRIZ OFREZCO × NECESITO ----------
+            n = len(usuarios)
+            matriz = [[0] * n for _ in range(n)]
+            for i in range(n):
+                for j in range(n):
+                    coincidencias = len(set(lista_ofrezco[i]) & set(lista_necesito[j]))
+                    matriz[i][j] = coincidencias
+
+            matriz_ofrezco_necesito = list(zip(usuarios, matriz))
+
+            # ---------- CALCULAR FRECUENCIAS ----------
+            frecuencias_ofrezco = dict(Counter(todas_palabras_ofrezco))
+            frecuencias_necesito = dict(Counter(todas_palabras_necesito))
+
+    return render(request, "procesamiento_ofrezco_necesito/procesamiento_ofrezco_necesito.html", {
+        "empresas": empresas,
+        "empresa_seleccionada": empresa_seleccionada,
+        "usuarios": usuarios,
+        "matriz_ofrezco_necesito": matriz_ofrezco_necesito,
+        "frecuencias_ofrezco": frecuencias_ofrezco,
+        "frecuencias_necesito": frecuencias_necesito,
     })

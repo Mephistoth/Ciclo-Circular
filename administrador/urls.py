@@ -12,7 +12,7 @@ from .views import homeAdmin, home_empresa, tablasExtraccion, entradasExtraccion
                 procesamiento_area, procesamiento_ideas, home_procesamiento, procesamiento_aempresa, admin_usuarios, editar_usuario, eliminar_usuario, resetear_clave, crear_usuario, notificaciones, \
                 enviar_recordatorio_view, enviar_mensaje_todos, form_mensaje_todos, menu_notificaciones, notificaciones_comuna, form_mensaje_comuna, enviar_mensaje_comuna, ver_cv, descargar_cv, procesamiento_palabra_clave ,\
                 asignar_coordinador, quitar_coordinador, panel_coordinador, registro, frecuencias, graficos, coordina_usuarios, crear_usuario_coordinacion, ver_cv_coordinacion, editar_usuario_coordinacion, \
-                eliminar_usuario_coordinacion, resetear_clave_coordinacion, procesamiento_cvs
+                eliminar_usuario_coordinacion, resetear_clave_coordinacion, procesamiento_cvs, procesamiento_ofrezco_necesito
 
 urlpatterns = [
     path('home_admin', homeAdmin, name='home_admin'),
@@ -24,6 +24,7 @@ urlpatterns = [
     path('procesamiento_aempresa', procesamiento_aempresa, name='procesamiento_aempresa'),
     path('procesamiento_palabra_clave', procesamiento_palabra_clave, name='procesamiento_palabra_clave'),
     path('procesamiento_cvs', procesamiento_cvs, name='procesamiento_cvs'),
+    path('procesamiento_ofrezco_necesito', procesamiento_ofrezco_necesito, name='procesamiento_ofrezco_necesito'),
     #admin usuarios
     path('usuarios/', admin_usuarios, name='admin_usuarios'),
     path("usuarios/editar/<int:user_id>/", editar_usuario, name="editar_usuario"),
