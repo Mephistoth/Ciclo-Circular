@@ -1,7 +1,7 @@
 from email import message
 from time import process_time_ns
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import AreaEmpresa, Entrada, Etapa, RegistroTrabajador, Salida, Oportunidades, Empresa, Idea, CVUsuario
+from .models import AreaEmpresa, Entrada, Etapa, RegistroTrabajador, Salida, Oportunidades, Empresa, Idea, CVUsuario, Oferta, Necesidad
 from django.contrib import messages
 from .forms import EntradaForm, SalidaForm, OportunidadForm
 from user.models import Usuario
@@ -1047,12 +1047,46 @@ def mi_perfil(request):
         palabras = [p for p in palabras if p]
 
     # --------------------------
+    # PALABRAS DE LA ÚLTIMA OFERTA
+    # --------------------------
+    ultima_oferta = Oferta.objects.filter(usuario=request.user).last()
+
+    if ultima_oferta:
+        palabras_oferta = [
+            ultima_oferta.palabra1,
+            ultima_oferta.palabra2,
+            ultima_oferta.palabra3
+        ]
+        palabras_oferta = [p for p in palabras_oferta if p]
+    else:
+        palabras_oferta = None
+
+    # --------------------------
+    # PALABRAS DE LA ÚLTIMA NECESIDAD
+    # --------------------------
+    ultima_necesidad = Necesidad.objects.filter(usuario=request.user).last()
+
+    if ultima_necesidad:
+        palabras_necesidad = [
+            ultima_necesidad.palabra1,
+            ultima_necesidad.palabra2,
+            ultima_necesidad.palabra3
+        ]
+        palabras_necesidad = [p for p in palabras_necesidad if p]
+    else:
+        palabras_necesidad = None
+
+    # --------------------------
     # RENDERIZAR TEMPLATE
     # --------------------------
     return render(request, 'mi_perfil/mi_perfil.html', {
         "registros": registros,
         "cv": cv,
-        "palabras": palabras
+        "palabras": palabras,
+        "palabras_oferta": palabras_oferta,
+        "palabras_necesidad": palabras_necesidad,
+        "ultima_oferta": ultima_oferta,
+        "ultima_necesidad": ultima_necesidad,
     })
 
 def subir_cv(request):
@@ -1161,3 +1195,86 @@ def generar_10_palabras_clave(texto):
 
     return palabras
 
+def generar_3_palabras_clave(texto):
+    completion = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": "Devuelve SOLO una lista de 3 palabras clave separadas por comas."
+            },
+            {
+                "role": "user",
+                "content": f"Extrae exactamente 3 palabras clave del siguiente texto. Respóndelas separadas por comas.\n\n{texto[:3000]}"
+            }
+        ]
+    )
+
+    content = completion.choices[0].message.content
+    palabras = [p.strip() for p in content.replace("\n", ",").split(",") if p.strip()]
+
+    # asegurar 3
+    palabras = palabras[:3]
+    while len(palabras) < 3:
+        palabras.append(None)
+
+    return palabras
+
+def guardar_oferta(request):
+    if request.method != "POST":
+        return redirect("mi_perfil")
+
+    texto = request.POST.get("texto_oferta")
+
+    if not texto or texto.strip() == "":
+        messages.error(request, "Debe ingresar un texto para la oferta.")
+        return redirect("mi_perfil")
+
+    # Generar palabras clave
+    try:
+        palabras = generar_3_palabras_clave(texto)
+    except Exception as e:
+        print("ERROR al generar palabras clave:", e)
+        palabras = [None, None, None]
+
+    # Guardar oferta
+    Oferta.objects.create(
+        usuario=request.user,
+        texto_oferta=texto,
+        palabra1=palabras[0],
+        palabra2=palabras[1],
+        palabra3=palabras[2]
+    )
+
+    messages.success(request, "Oferta guardada correctamente.")
+    return redirect("mi_perfil")
+
+
+def guardar_necesidad(request):
+    if request.method != "POST":
+        return redirect("mi_perfil")
+
+    texto = request.POST.get("texto_necesita")
+
+    if not texto or texto.strip() == "":
+        messages.error(request, "Debe ingresar un texto para la necesidad.")
+        return redirect("mi_perfil")
+
+    # Generar palabras clave
+    try:
+        palabras = generar_3_palabras_clave(texto)
+    except Exception as e:
+        print("ERROR al generar palabras clave:", e)
+        palabras = [None, None, None]
+
+    # Guardar necesidad
+    Necesidad.objects.create(
+        usuario=request.user,
+        texto_necesita=texto,
+        palabra1=palabras[0],
+        palabra2=palabras[1],
+        palabra3=palabras[2]
+    )
+
+    messages.success(request, "Necesidad guardada correctamente.")
+    return redirect("mi_perfil")

@@ -132,6 +132,30 @@ class CVUsuario(models.Model):
     def __str__(self):
         return f"CV de {self.usuario.username} ({self.timestamp})"
 
+class Oferta(models.Model):
+    id_oferta = models.AutoField(primary_key=True)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    texto_oferta = models.TextField()
+    palabra1 = models.CharField(max_length=200, null=True, blank=True)
+    palabra2 = models.CharField(max_length=200, null=True, blank=True)
+    palabra3 = models.CharField(max_length=200, null=True, blank=True)
+    creado = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Oferta de {self.usuario.username}"
+
+class Necesidad(models.Model):
+    id_necesidad = models.AutoField(primary_key=True)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    texto_necesita = models.TextField()
+    palabra1 = models.CharField(max_length=200, null=True, blank=True)
+    palabra2 = models.CharField(max_length=200, null=True, blank=True)
+    palabra3 = models.CharField(max_length=200, null=True, blank=True)
+    creado = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Necesidad de {self.usuario.username}"
+
 
 # class CicloArea(models.Model):
 #     id_ciclo = models.AutoField(primary_key=True)

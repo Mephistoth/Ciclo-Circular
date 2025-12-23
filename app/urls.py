@@ -66,4 +66,6 @@ urlpatterns = [
     #datos de usuario
     path('mi_perfil', mi_perfil, name="mi_perfil"),
     path('mi-cv/', subir_cv, name='subir_cv'),
+    path('perfil/oferta/', guardar_oferta, name='guardar_oferta'),
+    path('perfil/necesidad/', guardar_necesidad, name='guardar_necesidad'),
 ]
