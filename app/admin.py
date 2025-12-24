@@ -1,7 +1,7 @@
 from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
-from .models import AreaEmpresa, Empresa, Entrada, Etapa, Oportunidades, Salida, RegistroTrabajador, Idea, CVUsuario
+from .models import AreaEmpresa, Empresa, Entrada, Etapa, Oportunidades, Salida, RegistroTrabajador, Idea, CVUsuario, Oferta, Necesidad
 
 
 
@@ -33,6 +33,8 @@ admin.site.register(Idea)
 admin.site.register(Entrada)
 admin.site.register(Salida)
 admin.site.register(Oportunidades)
+admin.site.register(Oferta)
+admin.site.register(Necesidad)
 admin.site.register(RegistroTrabajador, ResgitroTrabajadorAdmin)
 
 
