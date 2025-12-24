@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from django.http import HttpResponse
 import os
 import io
+import qrcode
 import base64
 import fitz  # PyMuPDF
 import docx
@@ -983,60 +984,96 @@ def mi_perfil(request):
 
     # Obtener CV actual
     cv = CVUsuario.objects.filter(usuario=request.user).first()
+    qr_base64 = None
 
     # --------------------------
-    # PROCESAR SUBIDA / CAMBIO DE CV
+    # PROCESAR FORMULARIOS POST
     # --------------------------
     if request.method == "POST":
 
-        archivo = request.FILES.get("archivo")
-
-        if not archivo:
-            messages.error(request, "Debe seleccionar un archivo.")
+        # --------------------------
+        # 1. Actualizar URL de LinkedIn
+        # --------------------------
+        linkedin_url = request.POST.get("linkedin_url")
+        if linkedin_url and cv:
+            cv.linkedin_url = linkedin_url.strip()
+            cv.save()
+            messages.success(request, "URL de LinkedIn actualizada correctamente.")
             return redirect("mi_perfil")
 
-        # Leer bytes del archivo
-        file_bytes = archivo.read()
+        # --------------------------
+        # 2. Guardar QR generado desde URL (nuevo botón)
+        # action = save_qr
+        # --------------------------
+        if request.POST.get("action") == "save_qr" and cv and cv.linkedin_url:
+            qr = qrcode.make(cv.linkedin_url)
+            buffer = io.BytesIO()
+            qr.save(buffer, format="PNG")
+            cv.linkedin_qr = buffer.getvalue()
+            cv.save()
 
-        # Preparar archivo para extracción de texto
-        file_like = io.BytesIO(file_bytes)
-        file_like.name = archivo.name
+            messages.success(request, "QR de LinkedIn guardado correctamente.")
+            return redirect("mi_perfil")
 
-        # Extraer texto
-        texto = leer_archivo(file_like)
+        # --------------------------
+        # 3. Subir/Cambiar QR manualmente
+        # --------------------------
+        linkedin_qr_file = request.FILES.get("linkedin_qr")
+        if linkedin_qr_file and cv:
+            qr_bytes = linkedin_qr_file.read()
+            cv.linkedin_qr = qr_bytes
+            cv.save()
+            messages.success(request, "QR de LinkedIn actualizado correctamente.")
+            return redirect("mi_perfil")
 
-        # Generar palabras clave con ChatGPT
-        try:
-            palabras_generadas = generar_10_palabras_clave(texto)
-        except Exception as e:
-            print("ERROR al generar palabras clave:", e)
-            palabras_generadas = [None] * 10
+        # --------------------------
+        # 4. Subir/Cambiar CV completo
+        # --------------------------
+        archivo = request.FILES.get("archivo")
+        if archivo:
+            file_bytes = archivo.read()
+            file_like = io.BytesIO(file_bytes)
+            file_like.name = archivo.name
 
-        # Eliminar CV anterior
-        CVUsuario.objects.filter(usuario=request.user).delete()
+            # Extraer texto del CV
+            texto = leer_archivo(file_like)
 
-        # Guardar nuevo CV
-        cv = CVUsuario.objects.create(
-            usuario=request.user,
-            archivo=file_bytes,
-            nombre_archivo=archivo.name,
-            palabra1=palabras_generadas[0],
-            palabra2=palabras_generadas[1],
-            palabra3=palabras_generadas[2],
-            palabra4=palabras_generadas[3],
-            palabra5=palabras_generadas[4],
-            palabra6=palabras_generadas[5],
-            palabra7=palabras_generadas[6],
-            palabra8=palabras_generadas[7],
-            palabra9=palabras_generadas[8],
-            palabra10=palabras_generadas[9],
-        )
+            # Generar palabras clave con ChatGPT
+            try:
+                palabras_generadas = generar_10_palabras_clave(texto)
+            except Exception as e:
+                print("ERROR al generar palabras clave:", e)
+                palabras_generadas = [None] * 10
 
-        messages.success(request, "CV actualizado correctamente.")
+            # Eliminar CV anterior
+            CVUsuario.objects.filter(usuario=request.user).delete()
+
+            # Guardar nuevo CV
+            cv = CVUsuario.objects.create(
+                usuario=request.user,
+                archivo=file_bytes,
+                nombre_archivo=archivo.name,
+                palabra1=palabras_generadas[0],
+                palabra2=palabras_generadas[1],
+                palabra3=palabras_generadas[2],
+                palabra4=palabras_generadas[3],
+                palabra5=palabras_generadas[4],
+                palabra6=palabras_generadas[5],
+                palabra7=palabras_generadas[6],
+                palabra8=palabras_generadas[7],
+                palabra9=palabras_generadas[8],
+                palabra10=palabras_generadas[9],
+            )
+
+            messages.success(request, "CV actualizado correctamente.")
+            return redirect("mi_perfil")
+
+        # Si no llega nada válido
+        messages.error(request, "Debe seleccionar un archivo o ingresar datos válidos.")
         return redirect("mi_perfil")
 
     # --------------------------
-    # MOSTRAR PALABRAS EXISTENTES
+    # PREPARAR PALABRAS CLAVE Y QR
     # --------------------------
     palabras = []
     if cv:
@@ -1046,11 +1083,15 @@ def mi_perfil(request):
         ]
         palabras = [p for p in palabras if p]
 
+        # Convertir QR a Base64 para mostrarlo
+        if cv.linkedin_qr:
+            qr_base64 = base64.b64encode(cv.linkedin_qr).decode("utf-8")
+
     # --------------------------
-    # PALABRAS DE LA ÚLTIMA OFERTA
+    # Palabras última oferta
     # --------------------------
     ultima_oferta = Oferta.objects.filter(usuario=request.user).last()
-
+    palabras_oferta = None
     if ultima_oferta:
         palabras_oferta = [
             ultima_oferta.palabra1,
@@ -1058,14 +1099,12 @@ def mi_perfil(request):
             ultima_oferta.palabra3
         ]
         palabras_oferta = [p for p in palabras_oferta if p]
-    else:
-        palabras_oferta = None
 
     # --------------------------
-    # PALABRAS DE LA ÚLTIMA NECESIDAD
+    # Palabras última necesidad
     # --------------------------
     ultima_necesidad = Necesidad.objects.filter(usuario=request.user).last()
-
+    palabras_necesidad = None
     if ultima_necesidad:
         palabras_necesidad = [
             ultima_necesidad.palabra1,
@@ -1073,11 +1112,9 @@ def mi_perfil(request):
             ultima_necesidad.palabra3
         ]
         palabras_necesidad = [p for p in palabras_necesidad if p]
-    else:
-        palabras_necesidad = None
 
     # --------------------------
-    # RENDERIZAR TEMPLATE
+    # Renderizar template final
     # --------------------------
     return render(request, 'mi_perfil/mi_perfil.html', {
         "registros": registros,
@@ -1087,6 +1124,7 @@ def mi_perfil(request):
         "palabras_necesidad": palabras_necesidad,
         "ultima_oferta": ultima_oferta,
         "ultima_necesidad": ultima_necesidad,
+        "qr_base64": qr_base64,
     })
 
 def subir_cv(request):

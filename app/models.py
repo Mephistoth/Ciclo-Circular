@@ -127,6 +127,10 @@ class CVUsuario(models.Model):
     palabra8 = models.CharField(max_length=200, null=True, blank=True)
     palabra9 = models.CharField(max_length=200, null=True, blank=True)
     palabra10 = models.CharField(max_length=200, null=True, blank=True)
+
+    linkedin_url = models.URLField(max_length=500, null=True, blank=True)
+    linkedin_qr = models.BinaryField(null=True, blank=True)
+
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

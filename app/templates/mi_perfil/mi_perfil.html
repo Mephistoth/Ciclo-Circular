@@ -36,143 +36,221 @@
 
             <hr>
 
-            <div class="row">
-                <div class="col-md-9">
+            <!-- =============================== -->
+            <!--  LINKEDIN -->
+            <!-- =============================== -->
+            <div class="mb-4">
 
-                    <!-- =============================== -->
-                    <!--  MI CV + Cambiar CV -->
-                    <!-- =============================== -->
-                    <div class="mb-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <a href="{% url 'subir_cv' %}" class="btn btn-success no-hover-white" style="border-radius:60px;">
-                                MI CV
-                            </a>
-
-                            <form method="POST" enctype="multipart/form-data" class="d-flex gap-2">
-                                {% csrf_token %}
-                                <input id="archivoInput" type="file" name="archivo" class="form-control"
-                                    style="border-radius:60px; margin-top: 30px; width: 450px;" required>
-                                <button type="submit" class="btn btn-warning px-4"
-                                    style="border-radius:60px; color:black; font-weight:bold; margin-top: 30px;">
-                                    CAMBIAR CV
-                                </button>
-                            </form>
-                        </div>
-
-                        <p id="nombreArchivoSeleccionado" class="mt-2" style="color:#ffeb3b; font-weight:bold;"></p>
-
-                        {% if cv %}
-                        <p class="mt-2" style="color:white;">
-                            <strong>Archivo actual:</strong> {{ cv.nombre_archivo }}
-                        </p>
+                <!-- Mi LinkedIn -->
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <label class="form-label mb-0"><strong>Mi LinkedIn:</strong></label>
+                    <p id="linkedin_actual" class="mb-0" style="color:white;">
+                        {% if cv and cv.linkedin_url %}
+                        <a href="{{ cv.linkedin_url }}" target="_blank">{{ cv.linkedin_url }}</a>
+                        {% else %}
+                        No ingresado
                         {% endif %}
-                    </div>
+                    </p>
 
-                    <hr>
+                    <!-- Botón para habilitar input -->
 
-                    <!-- =============================== -->
-                    <!--  PALABRAS CLAVE DEL CV -->
-                    <!-- =============================== -->
-                    {% if palabras %}
-                    <div class="mb-4">
-                        <label class="form-label"><strong>Palabras clave:</strong></label>
-                        <div class="d-flex mb-2 flex-wrap">
-                            {% for palabra in palabras %}
-                            {% if forloop.counter <= 5 %}
-                            <div class="d-flex align-items-center me-3 mb-2">
-                                <span style="width:20px; text-align:right; margin-right:5px; color:white;">
-                                    {{ forloop.counter }}.
-                                </span>
-                                <span class="badge" style="background-color:rgba(255,255,255,0.1); color:white; font-size:1.2rem;">
-                                    {{ palabra }}
-                                </span>
-                            </div>
-                            {% endif %}
-                            {% endfor %}
-                        </div>
 
-                        <div class="d-flex flex-wrap">
-                            {% for palabra in palabras %}
-                            {% if forloop.counter > 5 %}
-                            <div class="d-flex align-items-center me-3 mb-2">
-                                <span style="width:20px; text-align:right; margin-right:5px; color:white;">
-                                    {{ forloop.counter }}.
-                                </span>
-                                <span class="badge" style="background-color:rgba(255,255,255,0.1); color:white; font-size:1.2rem;">
-                                    {{ palabra }}
-                                </span>
-                            </div>
-                            {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
+                    <!-- Formulario oculto inicialmente -->
+                    <form id="formLinkedin" method="POST" style="display:none;" class="d-flex gap-2">
+                        {% csrf_token %}
+                        <input type="url" name="linkedin_url" class="form-control" placeholder="Ingrese nueva URL"
+                            style="border-radius:60px;margin-top: 30px; width: 450px;">
+                        <button type="submit" class="btn btn-success px-3"
+                            style="border-radius:60px; font-weight:bold; margin-top: 30px;">
+                            Guardar URL
+                        </button>
+                        <button id="btnCambiarLinkedin" class="btn btn-warning px-3"
+                            style="border-radius:60px; color:black; font-weight:bold; margin-top: 30px;">
+                            Cambiar URL
+                        </button>
+                    </form>
+                </div>
+
+                <!-- QR LinkedIn -->
+                <div class="d-flex align-items-center gap-3">
+                    <label class="form-label mb-0"><strong>QR LinkedIn:</strong></label>
+
+                    {% if cv and qr_base64 %}
+                    <img src="data:image/png;base64,{{ qr_base64 }}" alt="QR LinkedIn" style="height:60px; width:60px;">
+                    {% else %}
+                    No cargado
                     {% endif %}
 
-                    <hr>
+                    <!-- Formulario para subir o guardar QR -->
+                    <form method="POST" enctype="multipart/form-data" class="d-flex gap-2">
+                        {% csrf_token %}
 
-                    <!-- =============================== -->
-                    <!--  OFREZCO -->
-                    <!-- =============================== -->
-                    <div class="mb-5">
-                        <label class="form-label"><strong>Ofrezco</strong></label>
+                        <!-- Input para subir un nuevo QR -->
+                        <input type="file" name="linkedin_qr" class="form-control"
+                            style="border-radius:60px; width:150px; margin-top: 30px;">
 
-                        <form method="POST" action="{% url 'guardar_oferta' %}">
+                        <!-- Nuevo botón Guardar QR -->
+                        <button type="submit" name="action" value="save_qr" class="btn btn-success px-3"
+                            style="border-radius:60px; font-weight:bold; margin-top: 30px;">
+                            Guardar QR
+                        </button>
+
+                        <button type="submit" name="action" value="change_qr" class="btn btn-warning px-3"
+                            style="border-radius:60px; color:black; font-weight:bold; margin-top: 30px;">
+                            Cambiar QR
+                        </button>
+                    </form>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-9">
+
+                <!-- =============================== -->
+                <!--  MI CV + Cambiar CV -->
+                <!-- =============================== -->
+                <div class="mb-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="{% url 'subir_cv' %}" class="btn btn-success no-hover-white"
+                            style="border-radius:60px;">
+                            MI CV
+                        </a>
+
+                        <form method="POST" enctype="multipart/form-data" class="d-flex gap-2">
                             {% csrf_token %}
-                            <textarea id="textarea_ofrezco" name="texto_oferta" class="form-control" rows="6">{% if ultima_oferta %}{{ ultima_oferta.texto_oferta }}{% endif %}</textarea>
-                            <div class="d-flex justify-content-center gap-3 mt-3">
-                                <button type="submit" class="btn btn-success" style="border-radius:60px;">GUARDAR OFREZCO</button>
-                                <a id="btnCambiarOfrezco" href="#" class="btn btn-warning px-4" style="border-radius:60px; color:black; font-weight:bold;">
-                                    CAMBIAR OFREZCO
-                                </a>
-                            </div>
+                            <input id="archivoInput" type="file" name="archivo" class="form-control"
+                                style="border-radius:60px; margin-top: 30px; width: 450px;" required>
+                            <button type="submit" class="btn btn-warning px-4"
+                                style="border-radius:60px; color:black; font-weight:bold; margin-top: 30px;">
+                                CAMBIAR CV
+                            </button>
                         </form>
-
-                        {% if palabras_oferta %}
-                        <div class="mt-3">
-                            <label class="form-label"><strong>Palabras clave de la última oferta:</strong></label>
-                            <div class="d-flex flex-wrap gap-2">
-                                {% for palabra in palabras_oferta %}
-                                <span class="badge bg-secondary" style="font-size:1.2rem;">{{ palabra }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
                     </div>
 
-                    <hr>
+                    <p id="nombreArchivoSeleccionado" class="mt-2" style="color:#ffeb3b; font-weight:bold;"></p>
 
-                    <!-- =============================== -->
-                    <!--  NECESITO -->
-                    <!-- =============================== -->
-                    <div class="mb-5">
-                        <label class="form-label"><strong>Necesito</strong></label>
+                    {% if cv %}
+                    <p class="mt-2" style="color:white;">
+                        <strong>Archivo actual:</strong> {{ cv.nombre_archivo }}
+                    </p>
+                    {% endif %}
+                </div>
 
-                        <form method="POST" action="{% url 'guardar_necesidad' %}">
-                            {% csrf_token %}
-                            <textarea id="textarea_necesito" name="texto_necesita" class="form-control" rows="6">{% if ultima_necesidad %}{{ ultima_necesidad.texto_necesita }}{% endif %}</textarea>
-                            <div class="d-flex justify-content-center gap-3 mt-3">
-                                <button type="submit" class="btn btn-success" style="border-radius:60px;">GUARDAR NECESITO</button>
-                                <a id="btnCambiarNecesito" href="#" class="btn btn-warning px-4" style="border-radius:60px; color:black; font-weight:bold;">
-                                    CAMBIAR NECESITO
-                                </a>
-                            </div>
-                        </form>
+                <hr>
 
-                        {% if palabras_necesidad %}
-                        <div class="mt-3">
-                            <label class="form-label"><strong>Palabras clave de la última necesidad:</strong></label>
-                            <div class="d-flex flex-wrap gap-2">
-                                {% for palabra in palabras_necesidad %}
-                                <span class="badge bg-secondary" style="font-size:1.2rem;">{{ palabra }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
+                <!-- =============================== -->
+                <!--  PALABRAS CLAVE DEL CV -->
+                <!-- =============================== -->
+                {% if palabras %}
+                <div class="mb-4">
+                    <label class="form-label"><strong>Palabras clave:</strong></label>
+                    <div class="d-flex mb-2 flex-wrap">
+                        {% for palabra in palabras %}
+                        {% if forloop.counter <= 5 %} <div class="d-flex align-items-center me-3 mb-2">
+                            <span style="width:20px; text-align:right; margin-right:5px; color:white;">
+                                {{ forloop.counter }}.
+                            </span>
+                            <span class="badge"
+                                style="background-color:rgba(255,255,255,0.1); color:white; font-size:1.2rem;">
+                                {{ palabra }}
+                            </span>
                     </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
 
+                <div class="d-flex flex-wrap">
+                    {% for palabra in palabras %}
+                    {% if forloop.counter > 5 %}
+                    <div class="d-flex align-items-center me-3 mb-2">
+                        <span style="width:20px; text-align:right; margin-right:5px; color:white;">
+                            {{ forloop.counter }}.
+                        </span>
+                        <span class="badge"
+                            style="background-color:rgba(255,255,255,0.1); color:white; font-size:1.2rem;">
+                            {{ palabra }}
+                        </span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
+            {% endif %}
+
+            <hr>
+
+            <!-- =============================== -->
+            <!--  OFREZCO -->
+            <!-- =============================== -->
+            <div class="mb-5">
+                <label class="form-label"><strong>Ofrezco</strong></label>
+
+                <form method="POST" action="{% url 'guardar_oferta' %}">
+                    {% csrf_token %}
+                    <textarea id="textarea_ofrezco" name="texto_oferta" class="form-control"
+                        rows="6">{% if ultima_oferta %}{{ ultima_oferta.texto_oferta }}{% endif %}</textarea>
+                    <div class="d-flex justify-content-center gap-3 mt-3">
+                        <button type="submit" class="btn btn-success" style="border-radius:60px;">GUARDAR
+                            OFREZCO</button>
+                        <a id="btnCambiarOfrezco" href="#" class="btn btn-warning px-4"
+                            style="border-radius:60px; color:black; font-weight:bold;">
+                            CAMBIAR OFREZCO
+                        </a>
+                    </div>
+                </form>
+
+                {% if palabras_oferta %}
+                <div class="mt-3">
+                    <label class="form-label"><strong>Palabras clave de la última oferta:</strong></label>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for palabra in palabras_oferta %}
+                        <span class="badge bg-secondary" style="font-size:1.2rem;">{{ palabra }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <hr>
+
+            <!-- =============================== -->
+            <!--  NECESITO -->
+            <!-- =============================== -->
+            <div class="mb-5">
+                <label class="form-label"><strong>Necesito</strong></label>
+
+                <form method="POST" action="{% url 'guardar_necesidad' %}">
+                    {% csrf_token %}
+                    <textarea id="textarea_necesito" name="texto_necesita" class="form-control"
+                        rows="6">{% if ultima_necesidad %}{{ ultima_necesidad.texto_necesita }}{% endif %}</textarea>
+                    <div class="d-flex justify-content-center gap-3 mt-3">
+                        <button type="submit" class="btn btn-success" style="border-radius:60px;">GUARDAR
+                            NECESITO</button>
+                        <a id="btnCambiarNecesito" href="#" class="btn btn-warning px-4"
+                            style="border-radius:60px; color:black; font-weight:bold;">
+                            CAMBIAR NECESITO
+                        </a>
+                    </div>
+                </form>
+
+                {% if palabras_necesidad %}
+                <div class="mt-3">
+                    <label class="form-label"><strong>Palabras clave de la última necesidad:</strong></label>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for palabra in palabras_necesidad %}
+                        <span class="badge bg-secondary" style="font-size:1.2rem;">{{ palabra }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
         </div>
+    </div>
+    </div>
     </div>
 
     <div id="bg"></div>
@@ -185,6 +263,15 @@
         });
 
         document.addEventListener("DOMContentLoaded", function () {
+            // Botón CAMBIAR URL LinkedIn
+            const btnCambiar = document.getElementById("btnCambiarLinkedin");
+            const formLinkedin = document.getElementById("formLinkedin");
+            btnCambiar.addEventListener("click", function (e) {
+                e.preventDefault();
+                formLinkedin.style.display = "flex";
+                formLinkedin.querySelector("input[name='linkedin_url']").focus();
+            });
+
             // Botón CAMBIAR OFREZCO enfoca el textarea
             const btnCambiarOfrezco = document.getElementById("btnCambiarOfrezco");
             const textareaOfrezco = document.getElementById("textarea_ofrezco");
@@ -215,4 +302,5 @@
     <script src="{% static 'js/main.js' %}"></script>
 
 </body>
+
 </html>
