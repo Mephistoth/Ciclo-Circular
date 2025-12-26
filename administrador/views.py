@@ -6058,8 +6058,6 @@ def procesamiento_cvs(request):
         "todas_las_palabras": todas_las_palabras,
     })
 
-from collections import Counter
-
 def procesamiento_ofrezco_necesito(request):
     empresas = Empresa.objects.all()
     empresa_id = request.GET.get("empresa")
@@ -6072,7 +6070,7 @@ def procesamiento_ofrezco_necesito(request):
     if empresa_id:
         empresa_seleccionada = Empresa.objects.get(id_empresa=empresa_id)
 
-        # Usuarios de la empresa
+        # Usuarios asociados a la empresa
         usuarios = Usuario.objects.filter(
             registrotrabajador__id_area__id_empresa__id_empresa=empresa_id
         ).distinct()
@@ -6086,33 +6084,39 @@ def procesamiento_ofrezco_necesito(request):
             todas_palabras_necesito = []
 
             for usr in usuarios:
+
                 # ---------- PALABRAS OFREZCO ----------
-                ofertas = Oferta.objects.filter(usuario=usr)
+                oferta = Oferta.objects.filter(usuario=usr).first()
                 ofrezco = []
-                for oferta in ofertas:
+
+                if oferta:
                     for campo in ["palabra1", "palabra2", "palabra3"]:
                         val = getattr(oferta, campo)
                         if val:
                             val_clean = val.strip().lower()
                             ofrezco.append(val_clean)
                             todas_palabras_ofrezco.append(val_clean)
+
                 lista_ofrezco.append(ofrezco)
 
                 # ---------- PALABRAS NECESITO ----------
-                necesidades = Necesidad.objects.filter(usuario=usr)
+                necesidad = Necesidad.objects.filter(usuario=usr).first()
                 necesito = []
-                for necesidad in necesidades:
+
+                if necesidad:
                     for campo in ["palabra1", "palabra2", "palabra3"]:
                         val = getattr(necesidad, campo)
                         if val:
                             val_clean = val.strip().lower()
                             necesito.append(val_clean)
                             todas_palabras_necesito.append(val_clean)
+
                 lista_necesito.append(necesito)
 
             # ---------- MATRIZ OFREZCO × NECESITO ----------
             n = len(usuarios)
             matriz = [[0] * n for _ in range(n)]
+
             for i in range(n):
                 for j in range(n):
                     coincidencias = len(set(lista_ofrezco[i]) & set(lista_necesito[j]))
@@ -6120,9 +6124,14 @@ def procesamiento_ofrezco_necesito(request):
 
             matriz_ofrezco_necesito = list(zip(usuarios, matriz))
 
-            # ---------- CALCULAR FRECUENCIAS ----------
-            frecuencias_ofrezco = dict(Counter(todas_palabras_ofrezco))
-            frecuencias_necesito = dict(Counter(todas_palabras_necesito))
+            # ---------- FRECUENCIA DE PALABRAS ----------
+            frecuencias_ofrezco = dict(
+                sorted(Counter(todas_palabras_ofrezco).items(), key=lambda x: x[1], reverse=True)
+            )
+
+            frecuencias_necesito = dict(
+                sorted(Counter(todas_palabras_necesito).items(), key=lambda x: x[1], reverse=True)
+            )
 
     return render(request, "procesamiento_ofrezco_necesito/procesamiento_ofrezco_necesito.html", {
         "empresas": empresas,

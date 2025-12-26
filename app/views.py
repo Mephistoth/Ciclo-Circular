@@ -1275,14 +1275,15 @@ def guardar_oferta(request):
         print("ERROR al generar palabras clave:", e)
         palabras = [None, None, None]
 
-    # Guardar oferta
-    Oferta.objects.create(
-        usuario=request.user,
-        texto_oferta=texto,
-        palabra1=palabras[0],
-        palabra2=palabras[1],
-        palabra3=palabras[2]
-    )
+    # Obtener o crear la oferta del usuario
+    oferta, created = Oferta.objects.get_or_create(usuario=request.user)
+
+    # Sobrescribir datos
+    oferta.texto_oferta = texto
+    oferta.palabra1 = palabras[0]
+    oferta.palabra2 = palabras[1]
+    oferta.palabra3 = palabras[2]
+    oferta.save()
 
     messages.success(request, "Oferta guardada correctamente.")
     return redirect("mi_perfil")
@@ -1305,14 +1306,15 @@ def guardar_necesidad(request):
         print("ERROR al generar palabras clave:", e)
         palabras = [None, None, None]
 
-    # Guardar necesidad
-    Necesidad.objects.create(
-        usuario=request.user,
-        texto_necesita=texto,
-        palabra1=palabras[0],
-        palabra2=palabras[1],
-        palabra3=palabras[2]
-    )
+    # Obtener o crear la necesidad del usuario
+    necesidad, created = Necesidad.objects.get_or_create(usuario=request.user)
+
+    # Sobrescribir datos
+    necesidad.texto_necesita = texto
+    necesidad.palabra1 = palabras[0]
+    necesidad.palabra2 = palabras[1]
+    necesidad.palabra3 = palabras[2]
+    necesidad.save()
 
     messages.success(request, "Necesidad guardada correctamente.")
     return redirect("mi_perfil")
