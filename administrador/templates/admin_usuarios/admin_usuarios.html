@@ -108,6 +108,11 @@
        class="btn btn-success" style="border-radius:60px;">
         Crear Nuevo Usuario
     </a>
+
+    <a href="{% url 'cargar_excel_usuarios' %}?empresa={{ empresa_seleccionada.id_empresa }}"
+   class="btn btn-primary" style="border-radius:60px;">
+    Cargar usuarios desde Excel
+    </a>
 </div>
 
 <table class="table table-dark table-striped">

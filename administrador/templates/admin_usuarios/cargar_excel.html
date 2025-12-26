@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="es">
+
+<head>
+    <title>Cargar Usuarios por Excel</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Tus estilos -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <noscript>
+        <link rel="stylesheet" href="{% static 'css/noscript.css' %}" />
+    </noscript>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="is-preload">
+
+<style>
+    .formulario-usuario label,
+    .formulario-usuario h2,
+    .formulario-usuario p,
+    .formulario-usuario select,
+    .formulario-usuario option {
+        color: white !important;
+    }
+
+    .formulario-usuario input,
+    .formulario-usuario select {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        border: 1px solid #ddd !important;
+    }
+
+    .formulario-usuario input::placeholder {
+        color: #e0e0e0 !important;
+    }
+</style>
+
+<br>
+
+<div id="wrapper">
+    <div class="container-sm formulario-usuario" style="margin-bottom:auto; max-width: 700px;">
+
+        <h2 class="text-center">
+            Carga Masiva de Usuarios vía Excel
+        </h2>
+
+        <hr>
+
+        <!-- Selección de empresa -->
+        <form method="GET" class="mb-4">
+            <label class="form-label">Seleccione Empresa</label>
+            <select class="form-select" name="empresa" onchange="this.form.submit()">
+                <option value="">-- Seleccione... --</option>
+                {% for emp in empresas %}
+                <option value="{{ emp.id_empresa }}" {% if empresa_seleccionada and emp.id_empresa == empresa_seleccionada.id_empresa %}selected{% endif %}>
+                    {{ emp.nombre }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+
+        {% if empresa_seleccionada %}
+
+        <!-- Formulario de carga -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <p>
+                Empresa seleccionada:
+                <strong>{{ empresa_seleccionada.nombre }}</strong>
+            </p>
+
+            <div class="mb-3">
+                <label class="form-label">Archivo Excel (.xlsx)</label>
+                <input type="file" name="archivo" class="form-control" required>
+            </div>
+
+            <p class="text-light">
+                <strong>Columnas requeridas:</strong><br>
+                username, first_name, last_name, email, area, descripcion, telefono (opcional)
+            </p>
+
+            <button class="btn btn-success" style="border-radius: 60px;">Subir Archivo</button>
+            <a href="/administrador/usuarios?empresa={{ empresa_seleccionada.id_empresa }}" class="btn btn-secondary" style="border-radius: 60px;">Cancelar</a>
+
+            <div class="mt-3">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} mt-2">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </form>
+
+        {% endif %}
+
+    </div>
+</div>
+
+<div id="bg"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/browser.min.js' %}"></script>
+<script src="{% static 'js/breakpoints.min.js' %}"></script>
+<script src="{% static 'js/util.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>

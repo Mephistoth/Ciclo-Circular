@@ -7,6 +7,7 @@ import fitz
 import random
 import string
 import re
+from openpyxl import load_workbook
 from ast import Return
 from datetime import datetime
 from pipes import Template
@@ -6140,4 +6141,121 @@ def procesamiento_ofrezco_necesito(request):
         "matriz_ofrezco_necesito": matriz_ofrezco_necesito,
         "frecuencias_ofrezco": frecuencias_ofrezco,
         "frecuencias_necesito": frecuencias_necesito,
+    })
+
+def cargar_excel_usuarios(request):
+    empresas = Empresa.objects.all()
+    empresa_id = request.GET.get("empresa")
+    empresa_seleccionada = None
+
+    if empresa_id:
+        empresa_seleccionada = Empresa.objects.get(id_empresa=empresa_id)
+
+    # Si no hay empresa → mostrar solo selección
+    if not empresa_seleccionada:
+        return render(request, "admin_usuarios/cargar_excel.html", {
+            "empresas": empresas,
+            "empresa_seleccionada": None
+        })
+
+    # POST → procesar Excel
+    if request.method == "POST":
+        archivo = request.FILES.get("archivo")
+        if not archivo:
+            messages.error(request, "Debe seleccionar un archivo Excel.")
+            return render(request, "admin_usuarios/cargar_excel.html", {
+                "empresas": empresas,
+                "empresa_seleccionada": empresa_seleccionada
+            })
+
+        try:
+            wb = load_workbook(archivo)
+            ws = wb.active
+        except Exception as e:
+            messages.error(request, f"Error al leer el archivo: {e}")
+            return render(request, "admin_usuarios/cargar_excel.html", {
+                "empresas": empresas,
+                "empresa_seleccionada": empresa_seleccionada
+            })
+
+        # Leer encabezados
+        columnas = [cell.value for cell in ws[1]]
+
+        # Validar columnas obligatorias
+        columnas_obligatorias = ["username", "first_name", "last_name", "email", "area"]
+        faltan = [c for c in columnas_obligatorias if c not in columnas]
+        if faltan:
+            messages.error(request, f"Faltan columnas obligatorias: {', '.join(faltan)}")
+            return render(request, "admin_usuarios/cargar_excel.html", {
+                "empresas": empresas,
+                "empresa_seleccionada": empresa_seleccionada
+            })
+
+        data = []
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            data.append(dict(zip(columnas, row)))
+
+        creados = 0
+        duplicados = 0
+
+        for fila in data:
+            username = str(fila.get("username", "")).strip()
+            first_name = str(fila.get("first_name", "")).strip()
+            last_name = str(fila.get("last_name", "")).strip()
+            email = str(fila.get("email", "")).strip()
+            telefono = fila.get("telefono", "")
+            area_nombre = str(fila.get("area", "")).strip()
+
+            # Validación obligatorios
+            if not username or not first_name or not last_name or not email or not area_nombre:
+                duplicados += 1
+                continue
+
+            # Evitar duplicados
+            if Usuario.objects.filter(username=username).exists() or Usuario.objects.filter(email=email).exists():
+                duplicados += 1
+                continue
+
+            # Área dentro de la empresa
+            try:
+                area = AreaEmpresa.objects.get(nombre=area_nombre, id_empresa=empresa_seleccionada)
+            except AreaEmpresa.DoesNotExist:
+                messages.error(request,
+                               f"El área '{area_nombre}' no existe en {empresa_seleccionada.nombre}.")
+                return render(request, "admin_usuarios/cargar_excel.html", {
+                    "empresas": empresas,
+                    "empresa_seleccionada": empresa_seleccionada
+                })
+
+            # Crear usuario
+            clave = generar_clave()
+            usuario = Usuario.objects.create(
+                username=username,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                telefono=telefono if telefono else None,
+                password=make_password(clave)
+            )
+
+            # Registrar área del usuario
+            RegistroTrabajador.objects.create(usuario=usuario, id_area=area)
+
+            # Enviar clave al correo
+            send_mail(
+                "Tu acceso a la plataforma",
+                f"Hola {first_name},\n\nTu usuario ha sido creado.\n\nUsuario: {username}\nClave: {clave}\n\nSaludos.",
+                settings.DEFAULT_FROM_EMAIL,
+                [email],
+                fail_silently=True,
+            )
+
+            creados += 1
+
+        messages.success(request, f"Usuarios creados: {creados} | Duplicados / saltados: {duplicados}")
+
+    # GET → mostrar formulario y también POST con errores o éxito
+    return render(request, "admin_usuarios/cargar_excel.html", {
+        "empresas": empresas,
+        "empresa_seleccionada": empresa_seleccionada
     })

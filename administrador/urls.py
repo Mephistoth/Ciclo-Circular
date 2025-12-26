@@ -12,7 +12,7 @@ from .views import homeAdmin, home_empresa, tablasExtraccion, entradasExtraccion
                 procesamiento_area, procesamiento_ideas, home_procesamiento, procesamiento_aempresa, admin_usuarios, editar_usuario, eliminar_usuario, resetear_clave, crear_usuario, notificaciones, \
                 enviar_recordatorio_view, enviar_mensaje_todos, form_mensaje_todos, menu_notificaciones, notificaciones_comuna, form_mensaje_comuna, enviar_mensaje_comuna, ver_cv, descargar_cv, procesamiento_palabra_clave ,\
                 asignar_coordinador, quitar_coordinador, panel_coordinador, registro, frecuencias, graficos, coordina_usuarios, crear_usuario_coordinacion, ver_cv_coordinacion, editar_usuario_coordinacion, \
-                eliminar_usuario_coordinacion, resetear_clave_coordinacion, procesamiento_cvs, procesamiento_ofrezco_necesito
+                eliminar_usuario_coordinacion, resetear_clave_coordinacion, procesamiento_cvs, procesamiento_ofrezco_necesito, cargar_excel_usuarios
 
 urlpatterns = [
     path('home_admin', homeAdmin, name='home_admin'),
@@ -34,6 +34,7 @@ urlpatterns = [
     #cv usuarios
     path('usuarios/cv/<int:user_id>/', ver_cv, name='ver_cv'),
     path('usuarios/cv/descargar/<int:cv_id>/', descargar_cv, name='descargar_cv'),
+    path("administrador/cargar_excel/", cargar_excel_usuarios, name="cargar_excel_usuarios"),
     #notificaciones
     path("notificaciones/", notificaciones, name="notificaciones"),
     path("notificaciones/opciones/", menu_notificaciones, name="menu_notificaciones"),
