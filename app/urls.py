@@ -68,4 +68,5 @@ urlpatterns = [
     path('mi-cv/', subir_cv, name='subir_cv'),
     path('perfil/oferta/', guardar_oferta, name='guardar_oferta'),
     path('perfil/necesidad/', guardar_necesidad, name='guardar_necesidad'),
+    path("editar-palabras-clave/", editar_palabras_clave, name="editar_palabras_clave"),
 ]

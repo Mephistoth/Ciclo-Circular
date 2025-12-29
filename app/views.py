@@ -1318,3 +1318,40 @@ def guardar_necesidad(request):
 
     messages.success(request, "Necesidad guardada correctamente.")
     return redirect("mi_perfil")
+
+def editar_palabras_clave(request):
+    if request.method == "POST":
+        usuario = request.user
+
+        # Obtener CV
+        cv = get_object_or_404(CVUsuario, usuario=usuario)
+
+        # Recibir palabras separadas por coma
+        texto = request.POST.get("palabras", "")
+        lista_palabras = [p.strip() for p in texto.split(",") if p.strip()]
+
+        # Limitar a máximo 10
+        lista_palabras = lista_palabras[:10]
+
+        # Rellenar con None hasta 10
+        while len(lista_palabras) < 10:
+            lista_palabras.append(None)
+
+        # Asignar una por una
+        cv.palabra1 = lista_palabras[0]
+        cv.palabra2 = lista_palabras[1]
+        cv.palabra3 = lista_palabras[2]
+        cv.palabra4 = lista_palabras[3]
+        cv.palabra5 = lista_palabras[4]
+        cv.palabra6 = lista_palabras[5]
+        cv.palabra7 = lista_palabras[6]
+        cv.palabra8 = lista_palabras[7]
+        cv.palabra9 = lista_palabras[8]
+        cv.palabra10 = lista_palabras[9]
+
+        cv.save()
+
+        messages.success(request, "Palabras clave actualizadas correctamente.")
+        return redirect("mi_perfil")
+
+    return redirect("mi_perfil")
