@@ -53,10 +53,9 @@
 {% if empresa_seleccionada %}
 <hr>
 
-<!-- =================== GESTIÓN DE USUARIOS =================== -->
-<h2 class="mt-4">Gestión de Usuarios</h2>
 
-<!-- BLOQUE COMO EN LA IMAGEN (COORDINADOR + CREAR + CARGAR) -->
+<h2 class="mt-4">USUARIOS COORDINADORES</h2>
+
 <div class="d-flex flex-column align-items-start mt-3 mb-4">
 
     {% if not coordinador_empresa %}
@@ -109,11 +108,18 @@
 {% endif %}
 
 <!-- CREAR NUEVO USUARIO Y CARGAR EXCEL (ALINEADOS: CREAR AL CENTRO, CARGAR A LA DERECHA) -->
-<div class="mb-2 d-flex justify-content-between align-items-center">
+
+<hr class="my-4">
+
+<!-- =================== USUARIOS =================== -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="m-0">USUARIOS DE {{ empresa_seleccionada.nombre|upper }}</h2>
+
+    <div class="mb-2 d-flex justify-content-between align-items-center">
     <div class="flex-grow-1 d-flex justify-content-center">
         <a href="{% url 'crear_usuario' %}?empresa={{ empresa_seleccionada.id_empresa }}"
            class="btn btn-success"
-           style="border-radius:60px; padding-left:30px; padding-right:30px; margin-left: 190px;">
+           style="border-radius:60px; padding-left:30px; padding-right:30px; margin-right: 70px;">
             Crear Nuevo Usuario
         </a>
     </div>
@@ -126,13 +132,6 @@
     </div>
 </div>
 
-<hr class="my-4">
-
-
-
-<!-- =================== USUARIOS =================== -->
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h3 class="m-0">USUARIOS DE {{ empresa_seleccionada.nombre|upper }}</h3>
 </div>
 
 <table class="table table-dark table-striped">
