@@ -41,7 +41,8 @@
         <div class="col-auto mb-2">
             <a href="?empresa={{ empresa.id_empresa }}">
                 <button type="button"
-                        class="btn {% if empresa_seleccionada and empresa.id_empresa == empresa_seleccionada.id_empresa %}btn-success{% endif %}" style="border-radius:60px;">
+                        class="btn {% if empresa_seleccionada and empresa.id_empresa == empresa_seleccionada.id_empresa %}btn-success{% endif %}"
+                        style="border-radius:60px;">
                     {{ empresa.nombre }}
                 </button>
             </a>
@@ -52,11 +53,26 @@
 {% if empresa_seleccionada %}
 <hr>
 
-<!-- =================== COORDINADOR =================== -->
-<h3 class="mt-4">
-    USUARIO COORDINADOR {{ empresa_seleccionada.nombre|upper }}
-</h3>
+<!-- =================== GESTIÓN DE USUARIOS =================== -->
+<h2 class="mt-4">Gestión de Usuarios</h2>
 
+<!-- BLOQUE COMO EN LA IMAGEN (COORDINADOR + CREAR + CARGAR) -->
+<div class="d-flex flex-column align-items-start mt-3 mb-4">
+
+    {% if not coordinador_empresa %}
+    <!-- AGREGAR COORDINADOR -->
+    <div class="mb-2">
+        <button class="btn btn-success"
+                data-bs-toggle="modal"
+                data-bs-target="#modalCoordinador"
+                style="border-radius:60px;">
+            Agregar Coordinador
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+<!-- =================== COORDINADOR (MOSTRAR SI EXISTE) =================== -->
 {% if coordinador_empresa %}
 <table class="table table-dark table-striped mt-3">
     <thead>
@@ -81,7 +97,8 @@
                       action="{% url 'quitar_coordinador' coordinador_empresa.id %}">
                     {% csrf_token %}
                     <button class="btn btn-outline-danger"
-                            onclick="return confirm('¿Quitar coordinador de esta empresa?');" style="border-radius:60px;">
+                            onclick="return confirm('¿Quitar coordinador de esta empresa?');"
+                            style="border-radius:60px;">
                         ELIMINAR COORDINADOR
                     </button>
                 </form>
@@ -89,30 +106,33 @@
         </tr>
     </tbody>
 </table>
-
-{% else %}
-<button class="btn btn-success mt-2"
-        data-bs-toggle="modal"
-        data-bs-target="#modalCoordinador" style="border-radius:60px;">
-    Agregar Coordinador
-</button>
 {% endif %}
 
+<!-- CREAR NUEVO USUARIO Y CARGAR EXCEL (ALINEADOS: CREAR AL CENTRO, CARGAR A LA DERECHA) -->
+<div class="mb-2 d-flex justify-content-between align-items-center">
+    <div class="flex-grow-1 d-flex justify-content-center">
+        <a href="{% url 'crear_usuario' %}?empresa={{ empresa_seleccionada.id_empresa }}"
+           class="btn btn-success"
+           style="border-radius:60px; padding-left:30px; padding-right:30px; margin-left: 190px;">
+            Crear Nuevo Usuario
+        </a>
+    </div>
+    <div>
+        <a href="{% url 'cargar_excel_usuarios' %}?empresa={{ empresa_seleccionada.id_empresa }}"
+           class="btn btn-primary"
+           style="border-radius:60px; padding-left:30px; padding-right:30px;">
+            Cargar usuarios desde Excel
+        </a>
+    </div>
+</div>
+
 <hr class="my-4">
+
+
 
 <!-- =================== USUARIOS =================== -->
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h3 class="m-0">USUARIOS DE {{ empresa_seleccionada.nombre|upper }}</h3>
-
-    <a href="{% url 'crear_usuario' %}?empresa={{ empresa_seleccionada.id_empresa }}"
-       class="btn btn-success" style="border-radius:60px;">
-        Crear Nuevo Usuario
-    </a>
-
-    <a href="{% url 'cargar_excel_usuarios' %}?empresa={{ empresa_seleccionada.id_empresa }}"
-   class="btn btn-primary" style="border-radius:60px;">
-    Cargar usuarios desde Excel
-    </a>
 </div>
 
 <table class="table table-dark table-striped">
@@ -123,6 +143,7 @@
             <th>Nombre</th>
             <th>Email</th>
             <th>Teléfono</th>
+            <th>Coordinador</th>
             <th></th>
         </tr>
     </thead>
@@ -135,6 +156,16 @@
             <td>{{ registro.usuario.first_name }} {{ registro.usuario.last_name }}</td>
             <td>{{ registro.usuario.email }}</td>
             <td>{{ registro.usuario.telefono }}</td>
+
+            <!-- INDICADOR SI ES COORDINADOR -->
+            <td>
+                {% if coordinador_empresa and coordinador_empresa.id == registro.usuario.id %}
+                    <strong>SI</strong>
+                {% else %}
+                    NO
+                {% endif %}
+            </td>
+
             <td>
 
                 <form action="{% url 'ver_cv' registro.usuario.id %}" method="GET" style="display:inline;">
@@ -151,7 +182,8 @@
                 <form action="{% url 'resetear_clave' registro.usuario.id %}" method="POST" style="display:inline;">
                     {% csrf_token %}
                     <button class="btn btn-outline-secondary btn-sm"
-                            onclick="return confirm('¿Enviar nueva clave al email de este usuario?'); " style="border-radius:60px;">
+                            onclick="return confirm('¿Enviar nueva clave al email de este usuario?');"
+                            style="border-radius:60px;">
                         Resetear clave
                     </button>
                 </form>
@@ -159,7 +191,8 @@
                 <form action="{% url 'eliminar_usuario' registro.usuario.id %}" method="POST" style="display:inline;">
                     {% csrf_token %}
                     <button class="btn btn-danger btn-sm"
-                            onclick="return confirm('¿Está seguro que desea eliminar este usuario?'); " style="border-radius:60px;">
+                            onclick="return confirm('¿Está seguro que desea eliminar este usuario?');"
+                            style="border-radius:60px;">
                         Eliminar
                     </button>
                 </form>
