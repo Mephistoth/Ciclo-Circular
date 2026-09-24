@@ -1,7 +1,8 @@
 # Ciclo Circular - Sistema de Gestión Industrial Full-Stack 🔄
+### 💼 Proyecto Desarrollado en Práctica Profesional
 
 ### 📝 Descripción
-Plataforma web Full-Stack desarrollada con el framework robusto **Django (Python)** para la automatización, simulación y optimización de ciclos de producción industriales. El sistema cuenta con una arquitectura modular avanzada que incluye un panel de administración, gestión de usuarios, módulos de automatización (`bot`) y una API REST integrada para futuras conexiones móviles o externas.
+Plataforma web Full-Stack desarrollada con el framework robusto **Django (Python)** para la automatización, simulación y optimización de ciclos de producción industriales. Este software fue diseñado e implementado como proyecto de finalización de **Práctica Profesional**, resolviendo requerimientos reales de modularidad, manejo de API REST y automatización de procesos internos. El sistema cuenta con una arquitectura modular avanzada que incluye un panel de administración, gestión de usuarios, módulos de automatización (`bot`) y una API REST integrada para futuras conexiones móviles o externas.
 
 ---
 
