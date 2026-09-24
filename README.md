@@ -1,26 +1,70 @@
-1.- Instalar Python
+# Ciclo Circular - Sistema de Gestión Industrial Full-Stack 🔄
 
-2.- Crear ambiente virtual comando: 
+### 📝 Descripción
+Plataforma web Full-Stack desarrollada con el framework robusto **Django (Python)** para la automatización, simulación y optimización de ciclos de producción industriales. El sistema cuenta con una arquitectura modular avanzada que incluye un panel de administración, gestión de usuarios, módulos de automatización (`bot`) y una API REST integrada para futuras conexiones móviles o externas.
 
-      python -m venv venv
+---
 
-3.- Ejecutar ambiante virtual:
+### 🚀 Stack Tecnológico
+* ⚙️ **Backend:** Python 3.x (Django Framework)
+* 🎨 **Frontend:** JavaScript, HTML5, CSS3, SCSS, Bootstrap
+* 🤖 **Automatización:** Módulo de tareas automatizadas (`bot`)
+* 🌐 **Integración:** API REST nativa incorporada
 
-		comando 1: cd venv/scripts
-		comando 2: activate.bat
+---
 
-4.- Ingresar app web:
+### ⚙️ Arquitectura del Sistema
+El proyecto sigue el patrón MVT (Model-View-Template) de Django, dividiendo las responsabilidades lógicas en módulos limpios y escalables:
+* `administrador`: Panel de control técnico y métricas del sistema.
+* `user`: Módulo de autenticación segura, manejo de sesiones y perfiles.
+* `api`: Capa de servicios para la exposición y consumo de datos.
+* `bot`: Scripts lógicos orientados a la automatización de procesos.
 
-		comando 1: cd ..
-		comando 2: cd..
-		comando 3: cd ciclo-lineal-de-produccion-main
+---
 
-4.- Instalar libreria comando: 
+### 🛠️ Guía de Instalación y Ejecución Local
 
-    pip install -r requirements.txt
+Sigue estos pasos para desplegar el entorno de desarrollo en tu máquina:
 
-5: ejecutar servidor:
+**1. Clonar el repositorio e ingresar al directorio:**
+```bash
+git clone https://github.com
+cd Ciclo-Circular
+```
 
-		comando1: python manage.py runserver
+**2. Crear el entorno virtual de Python:**
+```bash
+python -m venv venv
+```
 
-		
+**3. Activar el entorno virtual:**
+* *En Windows (CMD):*
+  ```bash
+  .\venv\Scripts\activate.bat
+  ```
+* *En Linux/Mac o Git Bash:*
+  ```bash
+  source venv/bin/activate
+  ```
+
+**4. Instalar las dependencias y librerías del proyecto:**
+```bash
+pip install -r requirements.txt
+```
+
+**5. Ejecutar las migraciones de la Base de Datos:**
+```bash
+python manage.py migrate
+```
+
+**6. Levantar el servidor de desarrollo:**
+```bash
+python manage.py runserver
+```
+*Abra [http://127.0.0.1:8000](http://127.0.0.1:8000) en su navegador para ver la aplicación ejecutándose.*
+
+---
+
+### 📬 Contacto
+* 💼 **LinkedIn:** [Felipe Soto](https://linkedin.com)
+* 📧 **Email:** felipeignacio28soto@gmail.com
