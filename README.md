@@ -29,7 +29,7 @@ Sigue estos pasos para desplegar el entorno de desarrollo en tu máquina:
 
 **1. Clonar el repositorio e ingresar al directorio:**
 ```bash
-git clone https://github.com
+git clone https://github.com/Mephistoth/Ciclo-Circular.git
 cd Ciclo-Circular
 ```
 
